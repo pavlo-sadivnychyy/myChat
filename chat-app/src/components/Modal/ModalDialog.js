@@ -15,7 +15,6 @@ export default function ModalDialog({
       open
       onClose={onClose}
       scroll="paper"
-      maxWidth="md"
       disableEscapeKeyDown
       disableBackdropClick
       fullWidth

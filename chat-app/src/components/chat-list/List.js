@@ -89,32 +89,32 @@ function List({
             <input onChange={(event) => onSearch(event.target.value)} placeholder="Search user" type="text" />
             <div className="users-list">
               <ul>
-                {
-                                        filteredUsers.map((item) => (
-                                          <li
-                                            key={item._id}
-                                            onClick={async () => {
-                                              axios.post('/conversations', { senderId: user._id, receiverId: item._id })
-                                                .then((res) => {
-                                                  if (res.status === 200) {
-                                                    defineActiveChat(res.data);
-                                                    setActiveMessages('All messages');
-                                                    getAllUserConversations();
-                                                    setSearchInput(true);
-                                                  } else {
-                                                    getDispatch().openSnackbar({
-                                                      open: true,
-                                                      msg: 'Conversations not found',
-                                                      color: 'warning',
-                                                    });
-                                                  }
-                                                });
-                                            }}
-                                          >
-                                            <p>{`${item.name} ${item.surname}`}</p>
-                                          </li>
-                                        ))
-                                    }
+              {
+                filteredUsers.map((item) => (
+                  <li
+                    key={item._id}
+                    onClick={async () => {
+                      axios.post('/conversations', { senderId: user._id, receiverId: item._id })
+                        .then((res) => {
+                          if (res.status === 200) {
+                            defineActiveChat(res.data);
+                            setActiveMessages('All messages');
+                            getAllUserConversations();
+                            setSearchInput(true);
+                          } else {
+                            getDispatch().openSnackbar({
+                              open: true,
+                              msg: 'Conversations not found',
+                              color: 'warning',
+                            });
+                          }
+                        });
+                    }}
+                  >
+                    <p>{`${item.name} ${item.surname}`}</p>
+                  </li>
+                ))
+              }
               </ul>
             </div>
           </div>
