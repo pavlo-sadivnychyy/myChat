@@ -4,9 +4,7 @@ import {MdPersonAdd} from "@react-icons/all-files/md/MdPersonAdd";
 import Modal from "../Modal/Modal";
 import AddTeamForm from "../Forms/AddTeamForm";
 
-function Teams() {
-
-    const teams = ['design', 'programming', "family"]
+function Teams({getTeams,teams, getConversationsOfActiveTeam, setTeamActive}) {
 
     return (
         <div className='teams'>
@@ -14,7 +12,7 @@ function Teams() {
                 <p>Teams</p>
                 <button onClick={() => {
                     Modal.open({
-                        component: (<AddTeamForm/>),
+                        component: (<AddTeamForm getTeams={getTeams}/>),
                         title: 'Add Team'
                     })
                 }}><MdPersonAdd/></button>
@@ -22,9 +20,12 @@ function Teams() {
             <ul className='teams-list'>
                 {
                     teams?.map((opt, key) => (
-                        <li key={key}>
-                            <p>#{opt}</p>
-                            <p>22</p>
+                        <li onClick={() => {
+                            setTeamActive(opt)
+                            getConversationsOfActiveTeam(opt)
+                        }} key={key}>
+                            <p>#{opt.name}</p>
+                            <p>{opt.conversations.length}</p>
                         </li>
                     ))
                 }

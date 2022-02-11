@@ -1,7 +1,9 @@
-import React from "reactn";
+import React, {getDispatch, useEffect, useGlobal, useState} from "reactn";
 import {Form, withFormik} from "formik";
 import {Button, Chip, InputLabel, MenuItem, OutlinedInput, Select, TextField} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
+import axios from "axios";
+
 
 const AddTeamForm = ({setFieldValue, values, handleChange}) => {
 
@@ -16,6 +18,30 @@ const AddTeamForm = ({setFieldValue, values, handleChange}) => {
         },
     };
 
+    const [conversations, setConversations] = useState([])
+    const [user] = useGlobal('user');
+
+    const [data, setData] = useState([])
+
+    useEffect(async () => {
+        await axios.get('/conversations/' + user._id)
+                .then(res => {
+                    setConversations(res.data)
+                })
+        values.currentUser = user._id
+    }, [user])
+
+    useEffect(async () => {
+        for(let i = 0; i < conversations.length; i++){
+            const friendId = conversations[i].members.find((item) => item !== user._id );
+            await axios.get('/users/' + friendId)
+                .then((res) => setData(prev => [...prev, {name: res.data.name, surname: res.data.surname, conversationId: conversations[i]._id}]))
+        }
+
+    }, [conversations])
+
+
+
     return (
         <Form className='form' >
             <Grid container>
@@ -28,7 +54,20 @@ const AddTeamForm = ({setFieldValue, values, handleChange}) => {
                         multiple
                         value={values.conversations}
                         onChange={(event) => {
-
+                            const arr = [];
+                            data.forEach((item) => {
+                                if (
+                                    event.target.value.includes(
+                                        item
+                                    )
+                                ) {
+                                    arr.push(item);
+                                }
+                            });
+                            setFieldValue(
+                                "conversations",
+                                arr
+                            );
                         }}
                         input={<OutlinedInput/>}
                         MenuProps={MenuProps}
@@ -39,14 +78,24 @@ const AddTeamForm = ({setFieldValue, values, handleChange}) => {
                                     display: "flex",
                                     flexWrap: "wrap",
                                 }}>
-                                    <Chip/>
+                                {selected.map((value) => (
+                                    <Chip
+                                        key={value._id}
+                                        label={`${value.name} ${value.surname}`}
+                                        style={{ margin: 2 }}
+                                    />
+                                ))}
                             </div>
                         )}
                     >
-
-                                <MenuItem>
-                                    Pavlo Sadivnychyy
+                        {data.map((item) => (
+                                <MenuItem
+                                    key={item._id}
+                                    value={item}
+                                >
+                                    {item.name} {item.surname}
                                 </MenuItem>
+                        ))}
                     </Select>
                 </Grid>
                 <Grid item xs={4}>
@@ -72,7 +121,32 @@ const CheckedAddTeamForm = withFormik({
 
 
     handleSubmit(values) {
-
+        const conversations = values.conversations.map((item) => item.conversationId);
+        const payload = {conversationId: conversations, name: values.name, userId: values.currentUser}
+        axios.post('/teams', payload)
+            .then((res) => {
+                if(res.status === 200){
+                    values.closeModal();
+                    values.updateTeams();
+                    getDispatch().openSnackbar({
+                        open: true,
+                        msg: "Team successfully created",
+                        color: "success",
+                    });
+                }else{
+                    getDispatch().openSnackbar({
+                        open: true,
+                        msg: "Couldn't create team",
+                        color: "warning",
+                    });
+                }
+            }).catch((err) => {
+            getDispatch().openSnackbar({
+                open: true,
+                msg: "Couldn't create team",
+                color: "warning",
+            });
+        });
 
     },
 })(AddTeamForm);

@@ -2,6 +2,9 @@ import React from "react";
 import {useFormik} from "formik";
 import './LoginPage.scss'
 import {useHistory} from "react-router-dom";
+import axios from "axios";
+import {useCookies} from "react-cookie";
+import {getDispatch, setGlobal} from "reactn";
 import CustomInput from "../../components/CustomInput";
 import {FormHelperText} from "@material-ui/core";
 import {loginSchema} from "../../validation";
@@ -11,14 +14,41 @@ import {loginSchema} from "../../validation";
 
 function LoginPage(){
     const history = useHistory();
+    const [, setCookie] = useCookies(['jwt']);
 
     const formik = useFormik({
         initialValues: {
             email: '',
             password: '',
         },
-        onSubmit: values => {
-              history.push('/messages')
+        onSubmit: async values => {
+            await axios.post("/auth/login", values)
+                .then((res) => {
+                        if(res.status === 200){
+                            setGlobal({
+                                user: res.data.user
+                            })
+                            setCookie("jwt", res.data.accessToken, {
+                                maxAge: 28800, // expire after 8 hrs
+                            });
+                            history.push('/messages')
+                        }
+                        if(res.status === 404) {
+                            getDispatch().openSnackbar({
+                                open: true,
+                                msg: "User not found",
+                                color: "warning",
+                            });
+                        }
+                    }
+                )
+                .catch((err) => {
+                    getDispatch().openSnackbar({
+                        open: true,
+                        msg: "User not found",
+                        color: "warning",
+                    });
+                });
         },
         validationSchema: loginSchema
     });

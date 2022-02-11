@@ -4,12 +4,12 @@ import Teams from "./Teams";
 import Groups from "./Groups";
 
 
-function Channels() {
+function Channels({getGroups, getTeams, teams, groups, getConversationsOfActiveTeam, setTeamActive, defineActiveChat, allUsers, getUsers}) {
 
     return (
         <div className='chat-list-container'>
-            <Teams />
-            <Groups/>
+            <Teams setTeamActive={setTeamActive} getConversationsOfActiveTeam={getConversationsOfActiveTeam} getTeams={getTeams} teams={teams}/>
+            <Groups getUsers={getUsers} allUsers={allUsers} defineActiveChat={defineActiveChat} getGroups={getGroups} groups={groups}/>
         </div>
     )
 }

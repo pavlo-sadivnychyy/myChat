@@ -3,8 +3,10 @@ import './Chat.scss'
 import {Formik} from 'formik'
 import Message from "./Message";
 import {BsPaperclip} from "react-icons/bs";
+import axios from "axios";
+import {messageSchema} from "../../validation";
 
-function Chat(){
+function Chat({messages, currentUser, activeChat, updateMessages, socket}){
 
 
     const scrollRef = useRef();
@@ -12,23 +14,35 @@ function Chat(){
 
     useEffect(() => {
         scrollRef.current?.scrollIntoView({behavior: "smooth"})
-    }, [])
+    }, [messages])
 
     return(
         <div className='chat'>
             <div className='messenger'>
 
                 <div className='message-container'>
-                            <div  ref={scrollRef}>
-                                <Message/>
-                                <Message/>
-                                <Message/>
+                    {
+                        messages.map((item, key) =>(
+                            <div key={key} ref={scrollRef}>
+                                <Message item={item} own={item.sender === currentUser._id}/>
                             </div>
+                        ))
+                    }
                 </div>
                 <div className='message-input'>
                     <Formik
                         initialValues={{message: ''}}
-                        onSubmit={(values,) => {
+                        onSubmit={async (values,) => {
+                            const payload = {
+                                sender: currentUser._id,
+                                text: values.message,
+                                conversationId: activeChat._id,
+                                activeChat: activeChat
+                            }
+                            await axios.post('/messages', payload);
+                            await socket.emit('sendMessage', payload)
+                            updateMessages();
+                            values.message = ''
                         }}
                     >
                         {props => (

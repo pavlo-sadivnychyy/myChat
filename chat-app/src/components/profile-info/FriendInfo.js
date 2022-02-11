@@ -1,21 +1,55 @@
 import React from 'react'
 import './FriendInfo.scss'
+import img from '../../img/user.png'
+import {getDispatch, useEffect, useGlobal, useState} from "reactn";
 import ime from "../../img/grapefruit-slice-332-332.jpg";
+import axios from "axios";
+
+function FriendInfo({user, activeChat}) {
+
+    const [data, setData] = useState({});
+
+    useEffect(() => {
+        if(activeChat){
+            const friendId = activeChat.members.find(id => id !== user._id)
+            getFriendData(friendId)
+        }else{
+            setData(user)
+        }
+    }, [activeChat])
 
 
-function FriendInfo() {
+    async function getFriendData(id){
+        try{
+            await axios.get('/users/' + id)
+                .then(res => {
+                    if(res.status === 200){
+                        setData(res.data);
+                    }else{
+                        getDispatch().openSnackbar({
+                            open: true,
+                            msg: "Couldn't get friend data",
+                            color: "warning",
+                        });
+                    }
+
+                })
+        }catch (err){
+            if(err) console.log(err)
+        }
+    }
 
     return (
         <div className='info-container'>
             <div className='profile-info'>
                 <div className='img-container'>
                     <div>
-                        <img src={ime} alt='Avatar' style={{width: '76px', height: '76px'}}/>
+                        <img src={data.file ? data.file : ime} alt='Avatar' style={{width: '76px', height: '76px'}}/>
                     </div>
                 </div>
                 <div className='friend-name-container'>
                     <div>
-                        <p className='name'>Pavlo Sadivnychyy</p>
+                        <p className='name'>{`${data?.name} ${data?.surname}`}</p>
                         <p className='place'>New York, USA</p>
                     </div>
                 </div>
@@ -27,7 +61,7 @@ function FriendInfo() {
                         Nickname
                     </p>
                     <p className="value">
-                        Pavlo
+                        {`${data?.nickname}`}
                     </p>
                 </div>
                 <div>
@@ -35,7 +69,7 @@ function FriendInfo() {
                         Email
                     </p>
                     <p className="value">
-                        Pavlo.sad1@gmail.com
+                        {`${data?.email}`}
                     </p>
                 </div>
                 <div>
@@ -43,7 +77,7 @@ function FriendInfo() {
                         Phone number
                     </p>
                     <p className="value">
-                       12345678
+                        {`${data?.phone_number}`}
                     </p>
                 </div>
                 <hr/>
@@ -53,7 +87,7 @@ function FriendInfo() {
                         Date of birth
                     </p>
                     <p className="value">
-                        12/07/1998
+                        {`${data?.dob}`}
                     </p>
                 </div>
                 <div>
@@ -61,7 +95,7 @@ function FriendInfo() {
                         Gender
                     </p>
                     <p className="value">
-                        Male
+                        {`${data?.gender}`}
                     </p>
                 </div>
                 <div>
@@ -69,7 +103,7 @@ function FriendInfo() {
                         Languages
                     </p>
                     <p className="value">
-                        English
+                        {`${data?.languages}`}
                     </p>
                 </div>
                 <button>Show full profile</button>

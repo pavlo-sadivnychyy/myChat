@@ -1,10 +1,11 @@
-import React from "reactn";
+import React, {getDispatch, useState, useEffect, useGlobal} from "reactn";
 import {Form, withFormik} from "formik";
 import {Button, Chip, InputLabel, MenuItem, OutlinedInput, Select, TextField} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
+import axios from "axios";
 
 
-const AddGroupForm = ({setFieldValue, values, handleChange}) => {
+const AddGroupForm = ({setFieldValue, values, handleChange, allUsers, getUsers}) => {
 
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
@@ -16,6 +17,11 @@ const AddGroupForm = ({setFieldValue, values, handleChange}) => {
             },
         },
     };
+    const [user] = useGlobal('user')
+
+    useEffect(() => {
+        getUsers()
+    }, [])
 
     return (
         <Form className='form' >
@@ -30,6 +36,15 @@ const AddGroupForm = ({setFieldValue, values, handleChange}) => {
                         value={values.participants}
                         onChange={(event) => {
                             const arr = [];
+                            allUsers.forEach((item) => {
+                                if (
+                                    event.target.value.includes(
+                                        item
+                                    )
+                                ) {
+                                    arr.push(item);
+                                }
+                            });
                             setFieldValue(
                                 "participants",
                                 arr
@@ -44,12 +59,23 @@ const AddGroupForm = ({setFieldValue, values, handleChange}) => {
                                     display: "flex",
                                     flexWrap: "wrap",
                                 }}>
-                                    <Chip/>
+                                {selected.map((value) => (
+                                    <Chip
+                                        key={value}
+                                        label={`${value.name} ${value.surname}`}
+                                        style={{ margin: 2 }}
+                                    />
+                                ))}
                             </div>
                         )}
                     >
-                                <MenuItem>
-                                    Pavlo Sadivnychyy
+                        {allUsers.map((item) => (
+                            (item._id !== user._id) && (
+                                <MenuItem
+                                    key={item._id}
+                                    value={item}
+                                >
+                                    {item.name} {item.surname}
                                 </MenuItem>
                             )
                         ))}
@@ -73,10 +99,40 @@ const AddGroupForm = ({setFieldValue, values, handleChange}) => {
 const CheckedAddGroupForm = withFormik({
     mapPropsToValues: (props) => ({
     participants: [],
+    currentUser: props.user._id,
     name: '',
     closeModal: props.modal.close,
+    updateGroups: props.getGroups
     }),
     handleSubmit(values) {
+
+        const members = values.participants.map((item) => item._id)
+        members.push(values.currentUser)
+        axios.post('/groups', {members: members, name: values.name})
+        .then((res) => {
+            if(res.status === 200){
+                values.closeModal();
+                values.updateGroups();
+                getDispatch().openSnackbar({
+                    open: true,
+                    msg: "Group successfully created",
+                    color: "success",
+                });
+            }else{
+                getDispatch().openSnackbar({
+                    open: true,
+                    msg: "Couldn't create group",
+                    color: "warning",
+                });
+            }
+        }).catch((err) => {
+            getDispatch().openSnackbar({
+                open: true,
+                msg: "Couldn't create group",
+                color: "warning",
+            });
+        });
+
 
     },
 })(AddGroupForm);
