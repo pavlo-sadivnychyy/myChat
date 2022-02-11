@@ -1,0 +1,100 @@
+.navbar-container{
+    height: 64px;
+    padding: 0 32px 0 34px;
+    background-color: #171b20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    .notifications{
+        position: absolute;
+        right: 330px;
+        top: 40px;
+        background-color: white;
+        padding: 10px;
+        border-radius: 15px 0 15px 15px;
+        border: 2px solid black;
+        ul{
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+    }
+    .navbar-main-links-container{
+        .navbar-main-links{
+            display: flex;
+            flex-wrap: wrap;
+            list-style-type:none;
+            padding: 0;
+            margin: 0;
+            li{
+                font-family: Avenir-Roman;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                //line-height: 1.43;
+                letter-spacing: normal;
+                color: #fff;
+                line-height: 45px;
+                height: 44px;
+                display: inline;
+                color: white;
+                padding: 10px;
+            }
+
+        }
+    }
+    .navbar-main-personal-settings-container{
+        display: flex;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.43;
+        letter-spacing: normal;
+        color: white;
+        .MuiBadge-badge {
+            background-color: #e62c2c;
+
+        }
+        .notification{
+            .MuiBadge-badge {
+                background-color: #24cf5f;
+
+            }
+        }
+        .MuiBadge-anchorOriginTopRightRectangle{
+            top: 5px;
+            right: 5px;
+        }
+        button{
+            cursor: pointer;
+            border-radius: 50%;
+            background: transparent;
+            border: 1px solid #737679;
+            width: 32px;
+            height: 32px;
+            margin-left: 32px;
+            text-align: center;
+            padding-top: 3px;
+            svg{
+                width: 16px;
+                height: 16px;
+                color: white;
+            }
+        }
+        div{
+            padding-left: 32px;
+            display: flex;
+            text-align: center;
+            align-items: center;
+            img{
+                margin-left: 10px;
+                border-radius: 50%;
+                width: 32px;
+                height: 32px;
+            }
+        }
+    }
+}

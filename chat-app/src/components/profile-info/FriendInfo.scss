@@ -1,0 +1,79 @@
+
+.info-container{
+  width: 15.5%;
+  height: 100%;
+  background-color: #181C20;
+  .profile-info{
+    height: 200px;
+    background-color: #14171a;
+    .img-container{
+      display: flex;
+      justify-content: center;
+      padding-top: 24px;
+      img{
+        width: 76px;
+        height: 76px;
+        border-radius: 50%;
+      }
+    }
+    .friend-name-container{
+      text-align: center;
+      .name{
+        font-size: 14px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.29;
+        letter-spacing: normal;
+        color: white;
+      }
+      .place{
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.29;
+        letter-spacing: normal;
+        color: #80878f;
+      }
+    }
+  }
+
+  .full-info{
+    padding: 13px 23px 0 23px;
+    .header{
+      font-size: 14px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1;
+      letter-spacing: normal;
+      color: #797f86;
+    }
+    .value{
+      font-size: 14px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1;
+      letter-spacing: normal;
+      color: #fff;
+    }
+    hr {
+      margin-top: 25px;
+      border: 1px solid #797f86;
+    }
+    button{
+      font-size: 14px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.29;
+      letter-spacing: normal;
+      color: #25c14a;
+      background: transparent;
+      border: none;
+      padding: 0;
+    }
+  }
+}

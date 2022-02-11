@@ -1,0 +1,13 @@
+.main-content{
+  display: flex;
+  height: calc(100vh - 64px);
+  .alternative{
+    width: 44.5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .noConversation{
+      color: #29aee5;
+    }
+  }
+}

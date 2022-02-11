@@ -1,0 +1,72 @@
+.login{
+  background: rgb(59, 59, 59);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .modal{
+    min-height: 500px;
+    display: flex;
+    .header{
+      text-align: center;
+      h1{
+
+        color: #343434;
+      }
+    }
+    justify-content: center;
+    width: 340px;
+    background-color: white;
+    form{
+      text-align: left;
+      label{
+        margin-left: 10px;
+        color: grey;
+        font-size: 11px;
+      }
+      input{
+        width: 258px;
+        height: 35px;
+        padding-left: 10px;
+        background: transparent;
+        border: 1px solid #AAA8A8;
+        box-sizing: border-box;
+        border-radius: 10px;
+        margin: 3px 0;
+        &:focus{
+          outline: none;
+        }
+      }
+      .register{
+        width: 100%;
+        text-align: right;
+        p{
+          margin-top: 20px;
+          font-family: Comic Sans MS, Comic Sans, cursive;
+          color: grey;
+          font-size: 11px;
+          &:hover{
+            text-decoration: underline;
+            color: #1b76ed;
+            cursor: pointer;
+          }
+
+        }
+      }
+      .button-submit{
+        text-align: center;
+        button{
+          margin-top: 20px;
+          background: #343434;
+          border-radius: 10px;
+          border: none;
+          color: white;
+          height: 35px;
+          width: 90%;
+          cursor: pointer;
+        }
+      }
+
+    }
+  }
+}

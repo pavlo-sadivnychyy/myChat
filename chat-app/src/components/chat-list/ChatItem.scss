@@ -1,0 +1,114 @@
+.chats{
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding-left: 24px;
+  padding-right: 24px;
+  .activity{
+    position: absolute;
+    top: 16px;
+    left: 25px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    border: 2px solid black;
+    background-color: red;
+    &.green{
+      background-color: #25c14a;
+    }
+
+
+  }
+  &.active{
+    background-color: #2473da;
+    color: white;
+    margin-top: -1px;
+    .chats-data{
+      .second{
+        span{
+          color: #ffffff;
+        }
+      }
+    }
+  }
+  .important{
+    z-index: 9999;
+    position: absolute;
+    background-color: #ffffff;
+    padding: 7px;
+    border-radius: 15px 0 15px 15px;
+    right: 30px;
+    top: 21px;
+
+    button{
+      cursor: pointer;
+      border-radius: 5px;
+      background-color: #545454;
+      font-size: 10px;
+      width: 100px;
+      border: none;
+      padding: 5px;
+      margin: 3px 0 3px 0;
+      font-family: Avenir-Roman, serif;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.43;
+      letter-spacing: normal;
+      color: #fff;
+      &:hover{
+        background-color: #b2b2b2;
+      }
+    }
+
+  }
+  .chats-data{
+    width: 100%;
+    border-bottom: 1px solid #5f6773;
+    padding-top: 5px;
+    padding-bottom: 15px;
+    .first{
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      height: 35px;
+      p{
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 0.5;
+        letter-spacing: normal;
+      }
+      button{
+        cursor: pointer;
+        padding: 0;
+        background-color: transparent;
+        border: none;
+        svg{
+          color: white;
+        }
+      }
+    }
+
+    .second{
+      display: flex;
+      justify-content: space-between;
+      span{
+        font-size: 10px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.2;
+        letter-spacing: normal;
+        color: #5f6773;
+      }
+    }
+  }
+  .chats-image{
+    display: flex;
+    align-items: center;
+    padding-right: 15px;
+  }
+}

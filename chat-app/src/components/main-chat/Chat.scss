@@ -1,0 +1,44 @@
+.chat{
+  height: 100%;
+  width: 44.5%;
+  .messenger{
+    height: 100%;
+    .message-container{
+      height: calc(100% - 92px);
+      padding-top: 30px;
+      padding-right: 30px;
+      padding-left: 30px;
+      background-color: #f3f4f7;
+      overflow-y: scroll;
+    }
+    .message-input{
+      margin-bottom: 0;
+      .form{
+        display: flex;
+        align-items: center;
+        background-color: white;
+        height: 62px;
+        padding: 0 25px 0 20px;
+        input{
+          border: none;
+          width: 100%;
+          &:focus{
+            outline: none;
+          }
+        }
+        button{
+          cursor: pointer;
+          border: none;
+          background-color: transparent;
+          color: #25c14a;
+          svg{
+            color: #000000;
+            width: 22px;
+            height: 22px;
+            padding-right: 10px;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,119 @@
+
+.content{
+  width: 23.5%;
+  background-color: #111518;
+  height: calc(100% - 112px);
+  .chats-settings-container{
+    border-bottom: 1px solid grey;
+    height: 111px;
+    .chats-header{
+      position: relative;
+      padding-left: 24px;
+      padding-right: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .search-input{
+        z-index: 9999;
+        position: absolute;
+        right: 24px;
+        height: 26px;
+        border-radius: 15px;
+        border: 1px solid grey;
+        background-color: inherit;
+        width: 45%;
+        input{
+          margin-top: 4px;
+          padding-left: 7px;
+          border-radius: 15px;
+          background-color: inherit;
+          border: none;
+          color: white;
+          width: 80%;
+          &:focus{
+            outline: none;
+          }
+        }
+        .users-list{
+          background-color: #111518;
+          overflow-y: scroll;
+          margin-top: 10px;
+          height: 150px;
+          ul{
+            list-style-type: none;
+            margin: 0;
+            padding: 5px 5px 5px 5px;
+            li{
+              p{
+                cursor: pointer;
+                font-size: 12px;
+                border-radius: 5px;
+                margin: 0 0 7px 0;
+                padding: 2px 0 2px 3px;
+                color: black;
+                background-color: #d9d9d9;
+              }
+            }
+          }
+        }
+
+      }
+      p{
+        padding: 6px 0 8px 0;
+        font-family: Avenir-Roman, serif;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.43;
+        letter-spacing: normal;
+        color: #fff;
+      }
+      button{
+        z-index: 999;
+        cursor: pointer;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: 1px solid #737679;
+        background-color: #181C20;
+        text-align: center;
+        padding-top: 3px;
+        svg{
+          color: white;
+          width: 12px;
+          height: 12px;
+        }
+      }
+    }
+    .sorting-bar{
+      ul{
+        margin: 0;
+        height: 50px;
+        padding-left: 24px;
+        padding-right: 24px;
+        list-style-type: none;
+        display: flex;
+        justify-content: space-between;
+        .active{
+          border-bottom: 2px solid red;
+        }
+        li{
+          cursor: pointer;
+          text-align: center;
+          display: inline;
+          color: white;
+          padding: 10px;
+
+        }
+      }
+    }
+  }
+
+  .chats-list-container{
+    height: calc(100% - 10px);
+    background-color: #111518;
+    padding-top: 10px;
+  }
+}
+
