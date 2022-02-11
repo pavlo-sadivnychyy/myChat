@@ -18,35 +18,37 @@ const io = require('socket.io')(8000, {
 });
 
 let actChat;
-let activeUsers = []
+let users = []
+
+function addUser(userId, socketId) {
+    !users.some((user) => user.userId === userId) &&
+    users.push({userId, socketId})
+}
+ function removeUser(socketId) {
+   users = users.filter(user => user.socketId !== socketId)
+ }
 
 io.on("connection", (socket) => {
-    console.log(socket.id)
 
-    socket.on('activeUser', (user) => {
-        if(!activeUsers.includes(user._id)){
-            activeUsers.push(user._id)
-        }
-        socket.emit('listOfActive', activeUsers)
-        console.log(activeUsers)
+    socket.on('addUser', (userId) => {
+        addUser(userId, socket.id)
+        io.emit('getUsers', users)
     })
 
-    socket.on('joinRoom', (activeChat) => {
-        socket.join(activeChat)
-        actChat = activeChat
+    socket.on('joinRoom', (data) => {
+        socket.join(data.activeChatId)
+        actChat = data.activeChatId
     })
 
     socket.on('sendMessage', (data) => {
-        if(actChat === data.conversationId){
+
             io.in(data.conversationId).emit('receiveMessage', data)
-        }
-        // else{
-        //     socket.broadcast.to('ID').emit( 'send msg', {somedata : somedata_server}); /// important
-        // }
+
     })
 
     socket.on('disconnect', () => {
-        console.log(activeUsers)
+        removeUser(socket.id)
+        io.emit("getUsers", users)
     })
 })
 
