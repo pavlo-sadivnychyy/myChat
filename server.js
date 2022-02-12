@@ -41,9 +41,7 @@ io.on("connection", (socket) => {
     })
 
     socket.on('sendMessage', (data) => {
-
-            io.in(data.conversationId).emit('receiveMessage', data)
-
+        socket.broadcast.to(data.conversationId).emit('receiveMessage', data)
     })
 
     socket.on('disconnect', () => {

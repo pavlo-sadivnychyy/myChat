@@ -12,6 +12,7 @@ import ime from '../../img/grapefruit-slice-332-332.jpg';
 function NavBar() {
   const history = useHistory();
   const [user] = useGlobal('user');
+  const [notif] = useGlobal('notif')
   const [cookies, , removeCookie] = useCookies(['jwt', 'connect.sid']);
   const [not] = useGlobal('not');
   function exit() {
@@ -21,10 +22,6 @@ function NavBar() {
       window.location.reload();
     }
   }
-
-  useEffect(() => {
-    console.log(not);
-  }, [not]);
   return (
     <div className="navbar-container">
       <div className="navbar-main-links-container">
@@ -47,7 +44,7 @@ function NavBar() {
         </Badge>
         <Badge
           className="notification"
-          badgeContent={not?.length || null}
+          badgeContent={notif?.length}
           max={99}
         >
           <button>

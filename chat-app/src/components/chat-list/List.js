@@ -15,6 +15,8 @@ function List({
   activeTeam,
   getUsers,
   getAllUserConversations,
+  setNotifications,
+  notifications,
   allUsers,
 }) {
   const [user] = useGlobal('user');
@@ -34,8 +36,6 @@ function List({
   useEffect(() => {
     if (activeTeam) {
       setActiveMessages('');
-    } else {
-      setActiveMessages('All messages');
     }
   }, [activeTeam]);
 
@@ -134,6 +134,21 @@ function List({
             </li>
             <li
               className={activeMessages === 'Unread' ? 'active' : null}
+              onClick={ async () => {
+                let temp = []
+                setNotifications([])
+                setActiveMessages('Unread');
+                    if(notifications){
+                        for(let i = 0; i < notifications?.length; i++){
+                            await axios.get('conversations/byId/' + notifications[i])
+                                .then((res) => {
+                                    res.data.map((item) => temp.push(item))
+                                })
+                        }
+                        setConversations(temp)
+                    }
+
+              }}
             >
               Unread
             </li>

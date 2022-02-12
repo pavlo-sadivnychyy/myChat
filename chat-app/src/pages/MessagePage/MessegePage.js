@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './MessagePage.scss';
-import { getDispatch, useGlobal } from 'reactn';
+import { getDispatch, setGlobal, useGlobal } from 'reactn';
 import axios from 'axios';
 import io from 'socket.io-client';
 import { useStateIfMounted } from 'use-state-if-mounted';
@@ -21,19 +21,26 @@ function MessagePage() {
   const [activeUsers, setActiveUsers] = useState([]);
   const socket = useRef();
   const [newMessage, setNewMessage] = useState(null);
+  const [notifications, setNotifications] = useState([])
 
   useEffect(() => {
     socket.current = io('ws://localhost:8000');
     socket.current.on('receiveMessage', (data) => {
-      setNewMessage(data);
+      setNewMessage(data)
     });
     getAllUserConversations();
   }, []);
 
   useEffect(() => {
-    newMessage && activeChat?._id === newMessage?.conversationId
-        && setMessages((prev) => [...prev, newMessage]);
-  }, [newMessage, activeChat]);
+    if(newMessage && activeChat?._id === newMessage?.conversationId){
+      setMessages((prev) => [...prev, newMessage]);
+      console.log('message')
+    }if(activeChat?._id !== newMessage?.conversationId){
+      if(!notifications.includes(newMessage.conversationId)){
+        setNotifications([...notifications, newMessage?.conversationId])
+      }
+    }
+  }, [newMessage]);
 
   useEffect(() => {
     socket.current.emit('addUser', user._id);
@@ -41,6 +48,12 @@ function MessagePage() {
       setActiveUsers(users);
     });
   }, [user]);
+
+  useEffect(() => {
+    setGlobal({
+      notif: notifications
+    })
+  }, [notifications])
 
   useEffect(async () => {
     updateMessages();
@@ -140,6 +153,8 @@ function MessagePage() {
         getConversationsOfActiveTeam={getConversationsOfActiveTeam}
       />
       <List
+        setNotifications={setNotifications}
+        notifications={notifications}
         setConversations={setConversations}
         activeUsers={activeUsers}
         activeChat={activeChat}

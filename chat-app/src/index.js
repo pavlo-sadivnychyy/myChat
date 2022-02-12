@@ -23,7 +23,7 @@ if (localStorage.getItem("@reactn")) {
         snackbarColor: "success",
         snackbarMsg: "Loading...",
         user: {},
-        not: []
+        notif: []
     });
 }
 
