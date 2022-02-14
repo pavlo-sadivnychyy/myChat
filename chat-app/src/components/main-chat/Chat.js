@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './Chat.scss';
 import { Formik } from 'formik';
 import { BsPaperclip } from 'react-icons/bs';
@@ -11,7 +11,7 @@ function Chat({
   const scrollRef = useRef();
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+    scrollRef.current?.scrollIntoView({ behavior: 'auto' });
   }, [messages]);
 
   return (
@@ -69,11 +69,15 @@ function Chat({
                     name="file"
                     type="file"
                     placeholder="Type your languages"
-                    onChange={(event) => props.setFieldValue('file', event.currentTarget.files[0])}
+                    onChange={(event) => {
+                      props.setFieldValue('file', event.currentTarget.files[0]);
+                      props.setFieldValue('message', event.currentTarget.files[0].name);
+                    }}
                   />
                   <BsPaperclip />
                 </label>
                 <input
+                  disabled={props.values.file !== null}
                   type="text"
                   placeholder="Type your message..."
                   name="message"

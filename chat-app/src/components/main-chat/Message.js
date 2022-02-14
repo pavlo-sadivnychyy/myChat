@@ -11,6 +11,16 @@ function Message({ item, own }) {
   const [sender, setSender] = useStateIfMounted({});
   const blob = new Blob([item.file], {type: item.type})
 
+  function download(arrayBuffer, type) {
+    if(typeof item.file !== 'string'){
+      const blob = new Blob([arrayBuffer], { type: type });
+      return URL.createObjectURL(blob);
+    }else {
+      return item.file
+    }
+  }
+
+
   useEffect(async () => {
     await axios.get(`/users/${item?.sender}`)
       .then((res) => {
@@ -62,7 +72,7 @@ function Message({ item, own }) {
                       <p className='name-of-file-right'>{item.file.toString().replace("uploads/", "")}</p>
                     </div>
                     <div>
-                      <a href={`${item.file}`} className='download-file-right'>Download</a>
+                      <a href={download(item.file, item.type)} download className='download-file-right'>Download</a>
                     </div>
                   </div>
                   <div className='file'>{typeof item.file === 'string' ? <img src={item.file} alt='Image'/> :
@@ -89,7 +99,7 @@ function Message({ item, own }) {
                       <p className='name-of-file-left'>{typeof item.file === 'string' ? item.file.toString().replace("uploads/", "") : item.fileName?.toString()}</p>
                     </div>
                     <div>
-                      <a className='download-file-left'>Download</a>
+                      <a  href={download(item.file, item.type)} className='download-file-left' download>Download</a>
                     </div>
                   </div>
                 </div>

@@ -13,10 +13,12 @@ function Channels({
   defineActiveChat,
   allUsers,
   getUsers,
+  activeTeam
 }) {
   return (
     <div className="chat-list-container">
       <Teams
+        activeTeam={activeTeam}
         setTeams={setTeams}
         setTeamActive={setTeamActive}
         getConversationsOfActiveTeam={getConversationsOfActiveTeam}

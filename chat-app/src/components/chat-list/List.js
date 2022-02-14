@@ -170,11 +170,9 @@ function List({
                         conversations?.map((item) => (
                           <div
                             key={item._id}
-                            onClick={() => {
-                              defineActiveChat(item);
-                            }}
                           >
                             <ChatItem
+                              defineActiveChat={defineActiveChat}
                               activeUsers={activeUsers}
                               setTeamActive={setTeamActive}
                               activeChat={activeChat}

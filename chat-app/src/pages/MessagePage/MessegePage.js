@@ -141,6 +141,7 @@ function MessagePage() {
   return (
     <div className="main-content">
       <Channels
+        activeTeam={activeTeam}
         setTeams={setTeams}
         setGroups={setGroups}
         setConversations={setConversations}

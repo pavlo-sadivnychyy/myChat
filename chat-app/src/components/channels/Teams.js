@@ -11,12 +11,14 @@ function Teams({
   setTeams,
   getConversationsOfActiveTeam,
   setTeamActive,
+  activeTeam
 }) {
   const [user] = useGlobal('user');
 
   useEffect(() => {
     getTeams();
   }, []);
+
 
   async function getTeams() {
     try {
@@ -53,22 +55,22 @@ function Teams({
       </div>
       <ul className="teams-list">
         {
-                    teams?.map((opt, key) => (
-                      <li
-                        onClick={() => {
-                          setTeamActive(opt);
-                          getConversationsOfActiveTeam(opt);
-                        }}
-                        key={key}
-                      >
-                        <p>
-                          #
-                          {opt.name}
-                        </p>
-                        <p>{opt.conversations.length}</p>
-                      </li>
-                    ))
-                }
+          teams?.map((opt, key) => (
+            <li
+              onClick={() => {
+                setTeamActive(opt);
+                getConversationsOfActiveTeam(opt);
+              }}
+              key={key}
+            >
+              <p style={{color: activeTeam?._id === opt._id ? 'white' : ''}}>
+                #
+                {opt.name}
+              </p>
+              <p style={{color: 'white'}}>{opt.conversations.length}</p>
+            </li>
+          ))
+        }
       </ul>
     </div>
   );

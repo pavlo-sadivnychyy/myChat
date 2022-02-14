@@ -8,13 +8,22 @@ import classNames from 'classnames';
 import { useStateIfMounted } from 'use-state-if-mounted';
 
 function ChatItem({
-  item, getConversations, activeChat, setTeamActive, activeUsers,
+  item, getConversations, activeChat, setTeamActive, activeUsers, defineActiveChat
 }) {
   const [user] = useGlobal('user');
 
   const [friend, setFriend] = useStateIfMounted({});
   const [important, setImportant] = useState(true);
   const [active, setToActive] = useState();
+  const [lastMessage, setLastMessage] = useStateIfMounted({})
+
+  useEffect(() => {
+    axios.get('/messages/' + item._id)
+      .then((res) => {
+        setLastMessage(res.data[res.data?.length - 1]);
+      })
+  },[])
+
 
   useEffect(() => {
     const res = activeUsers.find((item) => item.userId === friend._id);
@@ -48,8 +57,8 @@ function ChatItem({
   }, [item]);
 
   return (
-    <div className={classNames('chats', activeChat?._id === item._id ? 'active' : null)}>
-
+    <div className='main'>
+    <div onClick={() => defineActiveChat(item)} className={classNames('chats', activeChat?._id === item._id ? 'active' : null)}>
       <div className="chats-image">
         <img src={friend.file ? friend.file : img} alt="Avatar" style={{ borderRadius: '50%', width: '40px', height: '40px' }} />
       </div>
@@ -57,6 +66,7 @@ function ChatItem({
         <div className="first">
           <p>{friend.name && friend.surname ? `${friend.name} ${friend.surname}` : ''}</p>
           <button onClick={(e) => {
+            e.stopPropagation()
             setImportant(false);
           }}
           >
@@ -64,10 +74,12 @@ function ChatItem({
           </button>
         </div>
         <div className="second">
-          <span>I send you a few files for ...</span>
+          <span>{lastMessage ? lastMessage?.type === 'file' ? lastMessage.file.toString().replace('uploads/', '') : lastMessage?.text : 'No messages yet'}</span>
           <span>15:10 PM</span>
         </div>
       </div>
+      <div className={classNames('activity', active ? 'green' : '')} />
+    </div>
       <div hidden={important} ref={buttonRef} className="important">
         <button
           onClick={async () => {
@@ -96,7 +108,6 @@ function ChatItem({
         </button>
         <br />
         <button
-                        // className='important'
           ref={buttonRef}
           hidden={important}
           onClick={async () => {
@@ -125,9 +136,7 @@ function ChatItem({
           Delete chat
         </button>
       </div>
-      <div className={classNames('activity', active ? 'green' : '')} />
-    </div>
-
+</div>
   );
 }
 
