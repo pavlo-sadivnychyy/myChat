@@ -8,7 +8,8 @@ const messagesRoute = require('./routes/messages');
 const mongoose = require('mongoose')
 const teamsRoute = require('./routes/teams');
 const groupsRoute = require('./routes/group');
-const cors = require('cors')
+const cors = require('cors');
+const siofu = require("socketio-file-upload");
 
 
 const io = require('socket.io')(8000, {
@@ -41,7 +42,7 @@ io.on("connection", (socket) => {
     })
 
     socket.on('sendMessage', (data) => {
-        socket.broadcast.to(data.conversationId).emit('receiveMessage', data)
+            socket.broadcast.to(data.conversationId).emit('receiveMessage', data)
     })
 
     socket.on('disconnect', () => {

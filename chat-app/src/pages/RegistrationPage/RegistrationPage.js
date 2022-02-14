@@ -4,7 +4,7 @@ import '../LoginPage/LoginPage.scss';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import './RegistrationPage.scss';
-import { FormHelperText } from '@material-ui/core';
+import { Button, FormHelperText } from '@material-ui/core';
 import { registrationSchema } from '../../validation';
 import CustomInput from '../../components/CustomInput';
 
@@ -305,64 +305,22 @@ function RegistrationPage() {
               )}
             </div>
             <div>
-              <CustomInput
-                label="Image"
-                id="file"
-                name="file"
-                type="file"
-                placeholder="Type your languages"
-                onChange={(event) => formik.setFieldValue('file', event.currentTarget.files[0])}
-                error={
-                                    formik.errors.file
-                                    && formik.touched.file
-                                }
-              />
-              {formik.errors.file
-                                && formik.touched.file && (
-                                <FormHelperText
-                                  style={{
-                                    margin: '0 0 0 5px',
-                                    fontSize: '11px',
-                                    color: '#f44336',
-                                  }}
-                                >
-                                  {formik.errors.file}
-                                </FormHelperText>
-              )}
+              <Button
+                variant="contained"
+                component="label"
+                style={{marginTop: '17px'}}
+              >
+                Upload Your profile image
+                <input
+                  hidden
+                  id="file"
+                  name="file"
+                  type="file"
+                  placeholder="Type your languages"
+                  onChange={(event) => formik.setFieldValue('file', event.currentTarget.files[0])}
+                />
+              </Button>
             </div>
-            {/* <div> */}
-
-            {/*    /!*<Button*!/ */}
-            {/*    /!*    variant="contained"*!/ */}
-            {/*    /!*    component="label"*!/ */}
-            {/*    /!*>*!/ */}
-            {/*    /!*    Upload File*!/ */}
-            {/*        <input */}
-            {/*            id="file" */}
-            {/*            name="file" */}
-            {/*            type="file" */}
-            {/*            placeholder="Type your languages" */}
-            {/*            onChange={(event) => { */}
-            {/*                formik.setFieldValue("file", event.currentTarget.files[0]); */}
-            {/*            }} */}
-            {/*            value={formik.values.image} */}
-            {/*            // hidden */}
-            {/*        /> */}
-            {/*    /!*</Button>*!/ */}
-
-            {/*    /!*<label htmlFor='image'>Languages</label><br/>*!/ */}
-            {/*    /!*<input*!/ */}
-            {/*    /!*    id="image"*!/ */}
-            {/*    /!*    name="image"*!/ */}
-            {/*    /!*    type="file"*!/ */}
-            {/*    /!*    placeholder="Type your languages"*!/ */}
-            {/*    /!*    onChange={(event) => {*!/ */}
-            {/*    /!*        setFieldValue("file", event.currentTarget.files[0]);*!/ */}
-            {/*    /!*    }}*!/ */}
-            {/*    /!*    value={formik.values.image}*!/ */}
-            {/*    /! *//* /}
-                        {/*</div> */}
-
           </div>
           <br />
           <div className="button-submit">

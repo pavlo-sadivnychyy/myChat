@@ -11,19 +11,11 @@ const storage = multer.diskStorage({
         cb(null, new Date().toISOString() + file.originalname)
     }
 })
-const fileFilter = (req, file, cb) => {
-    if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
-        cb( null, true)
-    }else{
-        cb(null, false)
-    }
-}
 const upload = multer({
     storage: storage,
     limits: {
         filesize: 1024 * 1024 * 5
     },
-    fileFilter: fileFilter
 });
 
 
@@ -49,8 +41,6 @@ router.get('/:id', async function (req, res, next) {
 });
 
 router.post('/', upload.single('file'), async function (req, res,next) {
-
-    console.log(req.file)
 
     try{
         const newUser = await new User(

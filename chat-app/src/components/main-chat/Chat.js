@@ -17,7 +17,6 @@ function Chat({
   return (
     <div className="chat">
       <div className="messenger">
-
         <div className="message-container">
           {messages.map((item, key) => (
             <div key={key} ref={scrollRef}>
@@ -27,23 +26,53 @@ function Chat({
         </div>
         <div className="message-input">
           <Formik
-            initialValues={{ message: '' }}
+            initialValues={{ message: '', file: null}}
             onSubmit={async (values) => {
-              const payload = {
+
+              const type = values.file ? 'file' : 'text'
+
+              const fd = new FormData();
+              fd.append('conversationId', activeChat._id);
+              fd.append('text', values.message);
+              fd.append('sender', currentUser._id);
+              fd.append('type', type);
+              if(values.file){
+                fd.append('file', values.file, values.file.name);
+                fd.append('fileName', values.file.name);
+              }
+              await axios.post('/messages', fd, {
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              });
+              console.log(values.file?.name)
+              await socket.current.emit('sendMessage', {
                 sender: currentUser._id,
                 text: values.message,
+                type: type,
                 conversationId: activeChat._id,
-                activeChat,
-              };
-              await axios.post('/messages', payload);
-              await socket.current.emit('sendMessage', payload);
+                conversation: activeChat,
+                mimetype: values.file?.type,
+                fileName: values.file?.name.toString(),
+                file: values.file
+              });
               updateMessages();
               values.message = '';
+              values.file = null;
             }}
           >
             {(props) => (
               <form className="form" onSubmit={props.handleSubmit}>
-                <button><BsPaperclip /></button>
+                <label className="custom-file-upload">
+                  <input
+                    hidden
+                    name="file"
+                    type="file"
+                    placeholder="Type your languages"
+                    onChange={(event) => props.setFieldValue('file', event.currentTarget.files[0])}
+                  />
+                  <BsPaperclip />
+                </label>
                 <input
                   type="text"
                   placeholder="Type your message..."
@@ -51,7 +80,7 @@ function Chat({
                   value={props.values.message}
                   onChange={props.handleChange}
                 />
-                <button type="submit">SEND</button>
+                <button className='submit' type="submit">SEND</button>
               </form>
 
             )}

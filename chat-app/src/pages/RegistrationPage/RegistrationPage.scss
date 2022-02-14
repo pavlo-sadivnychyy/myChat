@@ -25,6 +25,12 @@
         justify-content: space-around;
         flex-wrap: wrap;
       }
+      .custom-file-upload{
+        border: 1px solid #b7b7b7;
+        padding: 7px;
+        border-radius: 10px;
+        width: 200px;
+      }
       .button-submit{
         text-align: center;
         button{

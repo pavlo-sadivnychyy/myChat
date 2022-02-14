@@ -26,7 +26,7 @@
             outline: none;
           }
         }
-        button{
+        .custom-file-upload{
           cursor: pointer;
           border: none;
           background-color: transparent;
@@ -37,6 +37,12 @@
             height: 22px;
             padding-right: 10px;
           }
+        }
+        .submit{
+          color: #25c14a;
+          cursor: pointer;
+          border: none;
+          background-color: transparent;
         }
       }
     }
