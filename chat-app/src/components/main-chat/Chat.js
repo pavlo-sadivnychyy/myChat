@@ -45,7 +45,6 @@ function Chat({
                   'Content-Type': 'application/json',
                 },
               });
-              console.log(values.file?.name)
               await socket.current.emit('sendMessage', {
                 sender: currentUser._id,
                 text: values.message,

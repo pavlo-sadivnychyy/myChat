@@ -8,8 +8,8 @@ const messagesRoute = require('./routes/messages');
 const mongoose = require('mongoose')
 const teamsRoute = require('./routes/teams');
 const groupsRoute = require('./routes/group');
+const downloadFileRoute = require('./routes/fileDownload')
 const cors = require('cors');
-const siofu = require("socketio-file-upload");
 
 
 const io = require('socket.io')(8000, {
@@ -83,6 +83,7 @@ app.use('/conversations', conversationRoute);
 app.use('/messages', messagesRoute);
 app.use('/teams', teamsRoute);
 app.use('/groups', groupsRoute);
+app.use('/fileDownload', downloadFileRoute);
 
 app.listen(9000, (err) => {
     if(err){

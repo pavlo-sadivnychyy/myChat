@@ -6,38 +6,22 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import { useStateIfMounted } from 'use-state-if-mounted';
 import Image from '../Image';
-import {saveAs} from 'file-saver'
+import FileDownload from 'js-file-download'
 
 function Message({ item, own }) {
   const [sender, setSender] = useStateIfMounted({});
   const blob = new Blob([item.file], {type: item.type})
 
-  // // function download(arrayBuffer, type) {
-  // //   if(typeof item.file !== 'string'){
-  // //     const blob = new Blob([arrayBuffer], { type: type });
-  // //     return URL.createObjectURL(blob).toString().replace('html', 'jpeg')
-  // //   }else {
-  // //     return item.file
-  // //   }
-  // // }
-  // function upload(element) {
-  //   const reader = new FileReader();
-  //   let file = element;
-  //   reader.onload = function () {
-  //     const arrayBuffer = this.result;
-  //     download();
-  //   }
-  //   reader.readAsArrayBuffer(file);
-  // }
-  //
-  function download() {
-    fetch('uploads/1.jpeg')
+  const download = (e) => {
+    const itemName = item.fileName ? item.fileName : item.file.toString().replace("uploads/", "")
+    axios({
+      url: '/fileDownload/' + itemName,
+      method: "GET",
+      responseType: 'blob'
+    })
       .then((res) => {
-        return res;
+        FileDownload(res.data, itemName)
       })
-  //   const blob = new Blob([item.file], { type: item.type });
-  //   const url = URL.createObjectURL(blob);
-  //   window.open(url);
   }
 
   useEffect(async () => {
@@ -47,7 +31,6 @@ function Message({ item, own }) {
           setSender(res.data);
         }
       });
-    console.log(item.fileName)
   }, [item]);
 
   const [user] = useGlobal('user');
@@ -91,7 +74,7 @@ function Message({ item, own }) {
                       <p className='name-of-file-right'>{item.file.toString().replace("uploads/", "")}</p>
                     </div>
                     <div>
-                      <a download className='download-file-right'>Download</a>
+                      <p onClick={(e) => download(e)} className='download-file-right'>Download</p>
                     </div>
                   </div>
                   <div className='file'>{typeof item.file === 'string' ? <img src={item.file} alt='Image'/> :
@@ -118,7 +101,7 @@ function Message({ item, own }) {
                       <p className='name-of-file-left'>{typeof item.file === 'string' ? item.file.toString().replace("uploads/", "") : item.fileName?.toString()}</p>
                     </div>
                     <div>
-                      <p className='download-file-left'>Download</p>
+                      <p onClick={(e) => download(e)} className='download-file-left'>Download</p>
                     </div>
                   </div>
                 </div>
