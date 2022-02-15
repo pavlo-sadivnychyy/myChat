@@ -43,7 +43,7 @@ function Message({ item, own }) {
               <>
                 <div className="chat-right">
                   <div className='mark'/>
-                  <div className="chat-text"><p>{item.text}</p></div>
+                  <div className="chat-text">{item.text}</div>
                   <div className="chat-avatar">
                     <img src={sender.file ? sender.file : img} alt="Retail Admin" />
                   </div>

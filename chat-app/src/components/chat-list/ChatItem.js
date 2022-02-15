@@ -6,6 +6,7 @@ import axios from 'axios';
 import { getDispatch, useGlobal } from 'reactn';
 import classNames from 'classnames';
 import { useStateIfMounted } from 'use-state-if-mounted';
+import moment from 'moment';
 
 function ChatItem({
   item,
@@ -81,8 +82,8 @@ function ChatItem({
           </button>
         </div>
         <div className="second">
-          <span>{lastMessage ? lastMessage?.type === 'file' ? lastMessage.file.toString().replace('uploads/', '') : lastMessage?.text : 'No messages yet'}</span>
-          <span>15:10 PM</span>
+            <p className='message-text'>{lastMessage ? lastMessage?.type === 'file' ? lastMessage.file.toString().replace('uploads/', '') : lastMessage?.text : 'No messages yet'}</p>
+            <p className='message-time'>{lastMessage ? moment(lastMessage.createdAt).format('HH:mma') : ""}</p>
         </div>
       </div>
       <div className={classNames('activity', active ? 'green' : '')} />
