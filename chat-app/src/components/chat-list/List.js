@@ -4,6 +4,7 @@ import { IoMdSearch } from '@react-icons/all-files/io/IoMdSearch';
 import { getDispatch, useGlobal } from 'reactn';
 import axios from 'axios';
 import ChatItem from './ChatItem';
+import { CircularProgress } from '@material-ui/core';
 
 function List({
   conversations,
@@ -81,10 +82,9 @@ function List({
       <div className="chats-settings-container">
         <div className="chats-header">
           <p>
-            List of
-            {activeTeam ? activeTeam.name : 'messages'}
+            {`List of ${activeTeam ? activeTeam.name : 'messages'}`}
           </p>
-          <button onClick={() => setSearchInput(false)}><IoMdSearch /></button>
+          <button  onClick={() => setSearchInput(false)}><IoMdSearch /></button>
           <div ref={searchInputRef} className="search-input" hidden={searchInput}>
             <input onChange={(event) => onSearch(event.target.value)} placeholder="Search user" type="text" />
             <div className="users-list">
@@ -147,7 +147,6 @@ function List({
                         }
                         setConversations(temp)
                     }
-
               }}
             >
               Unread
@@ -167,21 +166,23 @@ function List({
       </div>
       <div className="chats-list-container">
         {
-                        conversations?.map((item) => (
-                          <div
-                            key={item._id}
-                          >
-                            <ChatItem
-                              defineActiveChat={defineActiveChat}
-                              activeUsers={activeUsers}
-                              setTeamActive={setTeamActive}
-                              activeChat={activeChat}
-                              getConversations={getAllUserConversations}
-                              item={item}
-                            />
-                          </div>
-                        ))
-                    }
+          conversations?.map((item) => (
+            <div
+              key={item._id}
+            >
+              <ChatItem
+                getAllUserImportantConversations={getAllUserImportantConversations}
+                activeMessages={activeMessages}
+                defineActiveChat={defineActiveChat}
+                activeUsers={activeUsers}
+                setTeamActive={setTeamActive}
+                activeChat={activeChat}
+                getConversations={getAllUserConversations}
+                item={item}
+              />
+            </div>
+          ))
+        }
       </div>
     </div>
 

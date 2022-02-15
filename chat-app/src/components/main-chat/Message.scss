@@ -19,14 +19,17 @@
     padding: 16px 20px 16px 16px;
     background-color: #1b76ed;
     border-radius: 3px;
-    font-family: Avenir-Roman, serif;
-    font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.43;
-    letter-spacing: normal;
-    color: #fff;
+    p{
+      margin: 0;
+      font-family: Avenir-Roman, serif;
+      font-size: 14px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.43;
+      letter-spacing: normal;
+      color: #fff;
+    }
   }
   .chat-avatar{
     padding: 7px;

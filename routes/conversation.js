@@ -15,6 +15,17 @@ router.post('/updateConv/:conversationId', async (req,res) => {
     }
 })
 
+router.post('/unmarkFromImportant/:conversationId', async (req,res) => {
+    const conversation = await Conversation.findOneAndUpdate({_id: req.params.conversationId}, {important: false}, {new: true})
+
+    try{
+        const savedConversation = await conversation.save();
+        res.status(200).json(savedConversation);
+    }catch (err){
+        if(err) throw err
+    }
+})
+
 
 
 router.post('/', async (req,res) => {
@@ -45,10 +56,6 @@ router.post('/', async (req,res) => {
 
 
     }).clone().catch(function(err){ console.log(err)})
-
-
-
-
 })
 
 router.get('/important/:userId', async (req,res) => {
@@ -63,6 +70,8 @@ router.get('/important/:userId', async (req,res) => {
         if(err) throw err
     }
 })
+
+
 
 
 router.get('/:userId', async (req, res) =>{

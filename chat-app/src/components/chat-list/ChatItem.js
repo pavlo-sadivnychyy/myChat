@@ -8,7 +8,14 @@ import classNames from 'classnames';
 import { useStateIfMounted } from 'use-state-if-mounted';
 
 function ChatItem({
-  item, getConversations, activeChat, setTeamActive, activeUsers, defineActiveChat
+  item,
+  getConversations,
+  activeChat,
+  setTeamActive,
+  activeUsers,
+  defineActiveChat,
+  activeMessages,
+  getAllUserImportantConversations
 }) {
   const [user] = useGlobal('user');
 
@@ -83,33 +90,53 @@ function ChatItem({
       <div hidden={important} ref={buttonRef} className="important">
         <button
           onClick={async () => {
-            await axios.post(`/conversations/updateConv/${item._id}`)
-
-              .then((res) => {
-                if (res.status === 200) {
-                  setImportant(true);
-                  getDispatch().openSnackbar({
-                    open: true,
-                    msg: 'Chat added to important',
-                    color: 'success',
-                  });
-                }
-                if (res.status === 404) {
-                  getDispatch().openSnackbar({
-                    open: true,
-                    msg: 'Something went wrong',
-                    color: 'warning',
-                  });
-                }
-              });
+            if(activeMessages !== 'Important'){
+              await axios.post(`/conversations/updateConv/${item._id}`)
+                .then((res) => {
+                  if (res.status === 200) {
+                    setImportant(true);
+                    getDispatch().openSnackbar({
+                      open: true,
+                      msg: 'Chat added to important',
+                      color: 'success',
+                    });
+                  }
+                  if (res.status === 404) {
+                    getDispatch().openSnackbar({
+                      open: true,
+                      msg: 'Something went wrong',
+                      color: 'warning',
+                    });
+                  }
+                })
+            }else{
+              await axios.post(`/conversations/unmarkFromImportant/${item._id}`)
+                .then((res) => {
+                  if (res.status === 200) {
+                    setImportant(true);
+                    getAllUserImportantConversations()
+                    getDispatch().openSnackbar({
+                      open: true,
+                      msg: 'Chat removed from important',
+                      color: 'success',
+                    });
+                  }
+                  if (res.status === 404) {
+                    getDispatch().openSnackbar({
+                      open: true,
+                      msg: 'Something went wrong',
+                      color: 'warning',
+                    });
+                  }
+                })
+            }
           }}
         >
-          Mark as important
+          {activeMessages !== 'Important' ? "Mark as important" : "Unmark from important"}
         </button>
         <br />
         <button
           ref={buttonRef}
-          hidden={important}
           onClick={async () => {
             await axios.delete(`/conversations/${item._id}`)
               .then((res) => {

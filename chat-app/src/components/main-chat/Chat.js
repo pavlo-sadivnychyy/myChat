@@ -86,7 +86,6 @@ function Chat({
                 />
                 <button className='submit' type="submit">SEND</button>
               </form>
-
             )}
           </Formik>
         </div>
