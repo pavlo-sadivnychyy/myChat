@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const Group = require('../models/Group')
-const Conversation = require("../models/Conversation");
+const Conversation = require('../models/Conversation');
 
 router.post('/', async (req,res) => {
 console.log(req.body)
@@ -18,9 +18,17 @@ console.log(req.body)
 
 router.get('/:userId', async (req, res) =>{
     try{
-        const group = await Group.find({
-            members:{$in: [req.params.userId]}
-        });
+        const group = await Group.aggregate([
+            {$match: { members: { $in: [req.params.userId] }}},
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "members",
+                    foreignField: "_id",
+                    as: "user_info"
+                }
+            }
+        ])
         res.status(200).json(group)
     }
     catch (err){

@@ -34,10 +34,31 @@ router.post('/', upload.single('file'), async (req,res) => {
     }
 })
 router.get('/:conversationId', async (req, res) =>{
+    const page = req.query.page;
+    const limit = req.query.limit;
+    const startIndex = (page * limit) - 10;
     try{
-        const messages = await Message.find({
-            conversationId: req.params.conversationId
-        })
+        const messages = await Message.aggregate([
+        { $match : { conversationId : req.params.conversationId } },
+            {
+                $lookup : {
+                    from: "users",
+                    localField: "sender",
+                    foreignField: "_id",
+                    as: "user_info"
+                }
+            },
+            {
+                $sort : {createdAt : -1}
+            },
+            {
+                $skip: parseInt(startIndex)
+            },
+            {
+                $limit:
+                  parseInt(limit)
+            }
+        ])
         res.status(200).json(messages)
     }catch (err){
         if(err) throw err

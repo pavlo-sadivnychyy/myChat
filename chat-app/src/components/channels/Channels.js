@@ -13,7 +13,8 @@ function Channels({
   defineActiveChat,
   allUsers,
   getUsers,
-  activeTeam
+  activeTeam,
+  activeChat
 }) {
   return (
     <div className="chat-list-container">
@@ -25,6 +26,7 @@ function Channels({
         teams={teams}
       />
       <Groups
+        activeChat={activeChat}
         setGroups={setGroups}
         getUsers={getUsers}
         allUsers={allUsers}

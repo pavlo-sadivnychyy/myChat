@@ -9,6 +9,7 @@ const mongoose = require('mongoose')
 const teamsRoute = require('./routes/teams');
 const groupsRoute = require('./routes/group');
 const downloadFileRoute = require('./routes/fileDownload')
+const importantConvRoute = require('./routes/importantConversations')
 const cors = require('cors');
 
 
@@ -84,6 +85,7 @@ app.use('/messages', messagesRoute);
 app.use('/teams', teamsRoute);
 app.use('/groups', groupsRoute);
 app.use('/fileDownload', downloadFileRoute);
+app.use('/importantConv', importantConvRoute);
 
 app.listen(9000, (err) => {
     if(err){

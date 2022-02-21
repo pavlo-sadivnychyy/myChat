@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema(
     {
+        _id: {
+            type: String
+        },
         name: {
             type: String
         },
@@ -29,7 +32,7 @@ const UserSchema = new mongoose.Schema(
         languages:{
             type: String
         },
-        file: {type: String, required: true}
+        file: {type: String, required: true},
     }, {timestamps: true})
 
 module.exports =  mongoose.model("User", UserSchema)

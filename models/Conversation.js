@@ -4,6 +4,9 @@ const ConversationSchema = new mongoose.Schema({
     members: {
         type: Array
     },
+    _id: {
+        type: String
+    },
     important: Boolean
 }, {timestamps: true})
 

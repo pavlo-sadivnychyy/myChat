@@ -12,6 +12,7 @@ function Groups({
   defineActiveChat,
   allUsers,
   getUsers,
+  activeChat
 }) {
   const [user] = useGlobal('user');
 
@@ -54,20 +55,20 @@ function Groups({
       </div>
       <ul className="groups-list">
         {
-                    groups?.map((opt) => (
-                      <li
-                        key={opt._id}
-                        onClick={() => {
-                          defineActiveChat(opt);
-                        }}
-                      >
-                        <p>
-                          #
-                          {opt.name}
-                        </p>
-                      </li>
-                    ))
-                }
+          groups?.map((opt) => (
+            <li
+              key={opt._id}
+              onClick={() => {
+                defineActiveChat(opt);
+              }}
+            >
+              <p style={{color: activeChat?._id === opt._id ? 'white' : ''}}>
+                #
+                {opt.name}
+              </p>
+            </li>
+          ))
+        }
       </ul>
     </div>
   );

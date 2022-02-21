@@ -7,6 +7,7 @@ import { getDispatch, useGlobal } from 'reactn';
 import classNames from 'classnames';
 import { useStateIfMounted } from 'use-state-if-mounted';
 import moment from 'moment';
+import { isEmpty } from 'lodash/lang';
 
 function ChatItem({
   item,
@@ -20,23 +21,21 @@ function ChatItem({
 }) {
   const [user] = useGlobal('user');
 
-  const [friend, setFriend] = useStateIfMounted({});
   const [important, setImportant] = useState(true);
   const [active, setToActive] = useState();
-  const [lastMessage, setLastMessage] = useStateIfMounted({})
+  const [lastMessage, setLastMessage] = useStateIfMounted({});
+  const [friendData, setFriendData] = useState({})
 
   useEffect(() => {
-    axios.get('/messages/' + item._id)
-      .then((res) => {
-        setLastMessage(res.data[res.data?.length - 1]);
-      })
-  },[])
-
+    const friendInfo = item.user_info.find((item) => item._id !== user._id);
+    setFriendData(friendInfo)
+    setLastMessage(item.message[item.message.length - 1])
+  }, [item])
 
   useEffect(() => {
-    const res = activeUsers.find((item) => item.userId === friend._id);
+    const res = activeUsers.find((item) => item.userId === friendData._id);
     setToActive(res);
-  }, [activeUsers, friend]);
+  }, [activeUsers, friendData]);
 
   const buttonRef = useRef(null);
 
@@ -56,23 +55,18 @@ function ChatItem({
 
   useOutsideButtonClick(buttonRef);
 
-  useEffect(() => {
-    const friendId = item.members?.find((id) => id !== user._id);
-    axios.get(`/users/${friendId}`)
-      .then((res) => {
-        setFriend(res.data);
-      });
-  }, [item]);
-
+  if(isEmpty(friendData)){
+    return null;
+  }
   return (
     <div className='main'>
     <div onClick={() => defineActiveChat(item)} className={classNames('chats', activeChat?._id === item._id ? 'active' : null)}>
       <div className="chats-image">
-        <img src={friend.file ? friend.file : img} alt="Avatar" style={{ borderRadius: '50%', width: '40px', height: '40px' }} />
+        <img src={friendData.file ? friendData.file : img} alt="Avatar" style={{ borderRadius: '50%', width: '40px', height: '40px' }} />
       </div>
       <div className="chats-data">
         <div className="first">
-          <p>{friend.name && friend.surname ? `${friend.name} ${friend.surname}` : ''}</p>
+          <p>{friendData.name && friendData.surname ? `${friendData.name} ${friendData.surname}` : ''}</p>
           <button onClick={(e) => {
             e.stopPropagation()
             setImportant(false);

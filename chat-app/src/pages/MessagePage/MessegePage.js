@@ -22,6 +22,10 @@ function MessagePage() {
   const socket = useRef();
   const [newMessage, setNewMessage] = useState(null);
   const [notifications, setNotifications] = useState([])
+  const [currentPage, setCurrentPage] = useState(1);
+  const chatRef = useRef(null);
+
+
 
   useEffect(() => {
     socket.current = io('ws://localhost:8000');
@@ -34,7 +38,6 @@ function MessagePage() {
   useEffect(() => {
     if(newMessage && activeChat?._id === newMessage?.conversationId){
       setMessages((prev) => [...prev, newMessage]);
-      console.log('message')
     }if(activeChat?._id !== newMessage?.conversationId){
       if(!notifications.includes(newMessage.conversationId)){
         setNotifications([...notifications, newMessage?.conversationId])
@@ -66,6 +69,8 @@ function MessagePage() {
 
   function defineActiveChat(chat) {
     setActiveChat(chat);
+    setCurrentPage(1);
+    setMessages([])
   }
 
   async function getConversationsOfActiveTeam(team) {
@@ -94,11 +99,20 @@ function MessagePage() {
   }
 
   async function updateMessages() {
-    await axios.get(`/messages/${activeChat?._id}`)
+    await axios.get(`/messages/${activeChat?._id}?page=${currentPage}&limit=10`)
       .then((res) => {
-        setMessages(res.data);
+        // setMessages(res.data)
+        for(let i = 0; i < res.data.length; i++){
+          setMessages(function (messages) {
+            return [ res.data[i], ...messages]
+          });
+        }
       });
   }
+
+  useEffect(() => {
+    updateMessages();
+  }, [currentPage])
 
   async function getUsers() {
     try {
@@ -118,6 +132,9 @@ function MessagePage() {
       if (err) console.log(err);
     }
   }
+  useEffect(() => {
+      console.log(activeUsers)
+  }, [activeUsers])
 
   async function getAllUserConversations() {
     try {
@@ -138,9 +155,14 @@ function MessagePage() {
     }
   }
 
+  useEffect(() => {
+    console.log(messages)
+  }, [messages])
+
   return (
     <div className="main-content">
       <Channels
+        activeChat={activeChat}
         activeTeam={activeTeam}
         setTeams={setTeams}
         setGroups={setGroups}
@@ -173,24 +195,27 @@ function MessagePage() {
         activeChat={activeChat}
       />
       {
-                activeChat
-                  ? (
-                    <Chat
-                      socket={socket}
-                      updateMessages={updateMessages}
-                      currentUser={user}
-                      messages={messages}
-                      activeChat={activeChat}
-                    />
-                  )
-                  : (
-                    <div
-                      className="alternative"
-                    >
-                      <p className="noConversation">Open a conversation to start the chat</p>
-                    </div>
-                  )
-            }
+        activeChat
+          ? (
+            <Chat
+              setMessages={setMessages}
+              setCurrentPage={setCurrentPage}
+              chatRef={chatRef}
+              socket={socket}
+              updateMessages={updateMessages}
+              currentUser={user}
+              messages={messages}
+              activeChat={activeChat}
+            />
+          )
+          : (
+            <div
+              className="alternative"
+            >
+              <p className="noConversation">Open a conversation to start the chat</p>
+            </div>
+          )
+      }
 
     </div>
   );

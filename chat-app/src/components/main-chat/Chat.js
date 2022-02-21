@@ -6,20 +6,30 @@ import axios from 'axios';
 import Message from './Message';
 
 function Chat({
-  messages, currentUser, activeChat, updateMessages, socket,
+  messages, currentUser, activeChat, updateMessages, socket, chatRef, setCurrentPage, setMessages
 }) {
-  const scrollRef = useRef();
+  const messRef = useRef();
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: 'auto' });
+    messRef.current?.scrollIntoView({ behavior: 'auto' });
   }, [messages]);
+
+  const onScroll = () => {
+    if (chatRef.current) {
+      const { scrollTop} = chatRef.current;
+      if (scrollTop === 0) {
+        setCurrentPage((prev) => prev + 1)
+      }
+    }
+  };
+
 
   return (
     <div className="chat">
       <div className="messenger">
-        <div className="message-container">
+        <div onScroll={onScroll} ref={chatRef} className="message-container">
           {messages.map((item, key) => (
-            <div key={key} ref={scrollRef}>
+            <div ref={messRef} key={key} >
               <Message item={item} own={item.sender === currentUser._id} />
             </div>
           ))}
@@ -45,7 +55,7 @@ function Chat({
                   'Content-Type': 'application/json',
                 },
               });
-              await socket.current.emit('sendMessage', {
+              const message = {
                 sender: currentUser._id,
                 text: values.message,
                 type: type,
@@ -53,9 +63,11 @@ function Chat({
                 conversation: activeChat,
                 mimetype: values.file?.type,
                 fileName: values.file?.name.toString(),
-                file: values.file
-              });
-              updateMessages();
+                file: values.file,
+                user_info: activeChat.user_info
+              }
+              await socket.current.emit('sendMessage', message);
+              setMessages(prev => [...prev, message])
               values.message = '';
               values.file = null;
             }}

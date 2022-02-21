@@ -2,6 +2,8 @@ const { Router } = require('express');
 const User = require("../models/user");
 const router = Router();
 const multer = require('multer');
+const mongoose = require('mongoose');
+const ImportantConvList = require('../models/ImportantConv')
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb){
@@ -18,17 +20,10 @@ const upload = multer({
     },
 });
 
-
-
-
 router.get('/all', async function (req, res, next) {
-
-    // console.log('hello')
        User.find({}).then((result) => {
            res.status(200).json(result)
         }).catch((err) => console.log(err))
-        // res.status(200).json(user)
-
 });
 
 router.get('/:id', async function (req, res, next) {
@@ -45,6 +40,7 @@ router.post('/', upload.single('file'), async function (req, res,next) {
     try{
         const newUser = await new User(
             {
+                _id: new mongoose.Types.ObjectId().toString(),
                 name: req.body.name,
                 surname: req.body.surname,
                 nickname: req.body.nickname,
@@ -57,6 +53,11 @@ router.post('/', upload.single('file'), async function (req, res,next) {
                 file: req.file.path
             }
         );
+        const newImportantConv = await new ImportantConvList({
+          userId: newUser._id,
+          conversations: []
+        });
+        newImportantConv.save();
         const savedUser = await newUser.save();
         res.status(200).json(savedUser);
     }catch (err){

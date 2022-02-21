@@ -2,15 +2,17 @@ import img from '../../img/user.png';
 import './Message.scss';
 import moment from 'moment';
 import { useGlobal } from 'reactn';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useStateIfMounted } from 'use-state-if-mounted';
 import Image from '../Image';
 import FileDownload from 'js-file-download'
+import fileImage from '../../img/file.png'
 
 function Message({ item, own }) {
-  const [sender, setSender] = useStateIfMounted({});
   const blob = new Blob([item.file], {type: item.type})
+
+  const [friend, setFriend] = useState({})
 
   const download = (e) => {
     const itemName = item.fileName ? item.fileName : item.file.toString().replace("uploads/", "")
@@ -24,16 +26,14 @@ function Message({ item, own }) {
       })
   }
 
-  useEffect(async () => {
-    await axios.get(`/users/${item?.sender}`)
-      .then((res) => {
-        if (res.status === 200) {
-          setSender(res.data);
-        }
-      });
-  }, [item]);
+  useEffect(() => {
+    item.user_info?.map((user) => {
+      if(user._id === item.sender){
+        setFriend(user)
+      }
+    })
+  }, [item])
 
-  const [user] = useGlobal('user');
   return (
     <div className="chat-container">
       <div className="chat-box chatContainerScroll">
@@ -45,7 +45,7 @@ function Message({ item, own }) {
                   <div className='mark'/>
                   <div className="chat-text">{item.text}</div>
                   <div className="chat-avatar">
-                    <img src={sender.file ? sender.file : img} alt="Retail Admin" />
+                    <img src={item.user_info[0].file ? item.user_info[0].file : img} alt="Retail Admin" />
                   </div>
                 </div>
                 <div className="date-right"><p>{moment(item.createdAt).format('HH:mm a')}</p></div>
@@ -56,8 +56,7 @@ function Message({ item, own }) {
                 <div className="chat-left">
                   <div className='mark'/>
                   <div className="chat-avatar">
-                    <img src={sender.file ? sender.file : img} alt="Retail Admin" />
-
+                    <img src={friend.file ? friend.file : img} alt="Retail Admin" />
                   </div>
                   <div className="chat-text">{item.text}</div>
                   <p>{item.date}</p>
@@ -70,17 +69,17 @@ function Message({ item, own }) {
               <>
                 <div className="chat-right-file">
                   <div className='options'>
-                    <div>
+                    <div >
                       <p className='name-of-file-right'>{item.file.toString().replace("uploads/", "")}</p>
                     </div>
                     <div>
                       <p onClick={(e) => download(e)} className='download-file-right'>Download</p>
                     </div>
                   </div>
-                  <div className='file'>{typeof item.file === 'string' ? <img src={item.file} alt='Image'/> :
+                  <div className='file'>{typeof item.file === 'string' ? <img src={item.file || fileImage} alt='Image'/> :
                   <Image blob={blob} fileName={item.filename}/>}</div>
                   <div className="chat-avatar">
-                    <img src={sender.file ? sender.file : img} alt="Retail Admin" />
+                    <img src={friend.file ? friend.file : img} alt="Retail Admin" />
                   </div>
                 </div>
                 <div className="date-file-right"><p>{moment(item.createdAt).format('HH:mm a')}</p></div>
@@ -90,10 +89,10 @@ function Message({ item, own }) {
               <>
                 <div className="chat-left-file">
                   <div className="chat-avatar">
-                    <img src={sender.file ? sender.file : img} alt="Retail Admin" />
+                    <img src={friend.file ? friend.file : img} alt="Retail Admin" />
                   </div>
                   <div className='file'>
-                    {typeof item.file === 'string' ? <img src={item.file} alt='Image'/> :
+                    {typeof item.file === 'string' ? <img src={item.file || fileImage} alt='Image'/> :
                       <Image blob={blob} fileName={item.filename}/>}
                   </div>
                   <div className='options'>
