@@ -6,12 +6,12 @@ import axios from 'axios';
 import Message from './Message';
 
 function Chat({
-  messages, currentUser, activeChat, updateMessages, socket, chatRef, setCurrentPage, setMessages
+  messages, currentUser, activeChat, socket, chatRef, setCurrentPage, setMessages
 }) {
   const messRef = useRef();
 
   useEffect(() => {
-    messRef.current?.scrollIntoView({ behavior: 'auto' });
+      messRef.current?.scrollIntoView({ behavior: 'auto' });
   }, [messages]);
 
   const onScroll = () => {
@@ -29,8 +29,9 @@ function Chat({
       <div className="messenger">
         <div onScroll={onScroll} ref={chatRef} className="message-container">
           {messages.map((item, key) => (
-            <div ref={messRef} key={key} >
+            <div key={key} >
               <Message item={item} own={item.sender === currentUser._id} />
+              <div ref={messRef}/>
             </div>
           ))}
         </div>

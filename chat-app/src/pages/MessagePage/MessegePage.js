@@ -46,6 +46,10 @@ function MessagePage() {
   }, [newMessage]);
 
   useEffect(() => {
+    updateMessages();
+  }, [currentPage, activeChat])
+
+  useEffect(() => {
     socket.current.emit('addUser', user._id);
     socket.current.on('getUsers', (users) => {
       setActiveUsers(users);
@@ -59,7 +63,6 @@ function MessagePage() {
   }, [notifications])
 
   useEffect(async () => {
-    updateMessages();
     socket.current.emit('joinRoom', { activeChatId: activeChat?._id, userId: user.id });
   }, [activeChat]);
 
@@ -68,9 +71,9 @@ function MessagePage() {
   }
 
   function defineActiveChat(chat) {
-    setActiveChat(chat);
     setCurrentPage(1);
     setMessages([])
+    setActiveChat(chat);
   }
 
   async function getConversationsOfActiveTeam(team) {
@@ -101,7 +104,6 @@ function MessagePage() {
   async function updateMessages() {
     await axios.get(`/messages/${activeChat?._id}?page=${currentPage}&limit=10`)
       .then((res) => {
-        // setMessages(res.data)
         for(let i = 0; i < res.data.length; i++){
           setMessages(function (messages) {
             return [ res.data[i], ...messages]
@@ -109,10 +111,6 @@ function MessagePage() {
         }
       });
   }
-
-  useEffect(() => {
-    updateMessages();
-  }, [currentPage])
 
   async function getUsers() {
     try {
@@ -132,9 +130,6 @@ function MessagePage() {
       if (err) console.log(err);
     }
   }
-  useEffect(() => {
-      console.log(activeUsers)
-  }, [activeUsers])
 
   async function getAllUserConversations() {
     try {
@@ -154,10 +149,6 @@ function MessagePage() {
       if (err) console.log(err);
     }
   }
-
-  useEffect(() => {
-    console.log(messages)
-  }, [messages])
 
   return (
     <div className="main-content">

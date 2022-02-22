@@ -25,6 +25,7 @@ function ChatItem({
   const [active, setToActive] = useState();
   const [lastMessage, setLastMessage] = useStateIfMounted({});
   const [friendData, setFriendData] = useState({})
+  const buttonRef = useRef(null);
 
   useEffect(() => {
     const friendInfo = item.user_info.find((item) => item._id !== user._id);
@@ -37,22 +38,17 @@ function ChatItem({
     setToActive(res);
   }, [activeUsers, friendData]);
 
-  const buttonRef = useRef(null);
-
   function useOutsideButtonClick(ref) {
     function handleClickOutside(event) {
       if (ref.current && !ref.current.contains(event.target)) {
         setImportant(true);
       }
     }
-    // Bind the event listener
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      // Unbind the event listener on clean up
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }
-
   useOutsideButtonClick(buttonRef);
 
   if(isEmpty(friendData)){
