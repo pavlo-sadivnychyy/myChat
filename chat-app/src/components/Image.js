@@ -9,7 +9,6 @@ function Image({blob,fileName}) {
     reader.readAsDataURL(blob);
     reader.onloadend = function (){
       setImageSrc(reader.result.toString())
-      console.log(reader.result.toString())
     }
   }, [blob])
 

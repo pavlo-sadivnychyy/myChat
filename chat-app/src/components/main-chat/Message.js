@@ -43,7 +43,7 @@ function Message({ item, own }) {
               <>
                 <div className="chat-right">
                   <div className='mark'/>
-                  <div className="chat-text">{item.text}</div>
+                  <div className="chat-text"><p>{item.text}</p></div>
                   <div className="chat-avatar">
                     <img src={item.user_info[0].file ? item.user_info[0].file : img} alt="Retail Admin" />
                   </div>
@@ -58,7 +58,7 @@ function Message({ item, own }) {
                   <div className="chat-avatar">
                     <img src={friend.file ? friend.file : img} alt="Retail Admin" />
                   </div>
-                  <div className="chat-text">{item.text}</div>
+                  <div className="chat-text"><p>{item.text}</p></div>
                   <p>{item.date}</p>
                 </div>
                 <div className="date-left"><p>{moment(item.createdAt).format('HH:mm a')}</p></div>
@@ -70,7 +70,7 @@ function Message({ item, own }) {
                 <div className="chat-right-file">
                   <div className='options'>
                     <div >
-                      <p className='name-of-file-right'>{item.file.toString().replace("uploads/", "")}</p>
+                      <p className='name-of-file-right'>{typeof item.file === 'string' ? item.file.toString().replace("uploads/", "") : item.fileName?.toString()}</p>
                     </div>
                     <div>
                       <p onClick={(e) => download(e)} className='download-file-right'>Download</p>

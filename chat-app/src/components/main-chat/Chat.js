@@ -4,6 +4,7 @@ import { Formik } from 'formik';
 import { BsPaperclip } from 'react-icons/bs';
 import axios from 'axios';
 import Message from './Message';
+import { messageSchema } from '../../validation';
 
 function Chat({
   messages, currentUser, activeChat, socket, chatRef, setCurrentPage, setMessages
@@ -11,12 +12,12 @@ function Chat({
   const messRef = useRef();
 
   useEffect(() => {
-      messRef.current?.scrollIntoView({ behavior: 'auto' });
+    messRef.current?.scrollIntoView()
   }, [messages]);
 
   const onScroll = () => {
     if (chatRef.current) {
-      const { scrollTop} = chatRef.current;
+      const {scrollTop} = chatRef.current;
       if (scrollTop === 0) {
         setCurrentPage((prev) => prev + 1)
       }
@@ -72,6 +73,7 @@ function Chat({
               values.message = '';
               values.file = null;
             }}
+            validationSchema={messageSchema}
           >
             {(props) => (
               <form className="form" onSubmit={props.handleSubmit}>
