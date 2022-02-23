@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const Group = require('../models/Group')
-const Conversation = require('../models/Conversation');
 
 router.post('/', async (req,res) => {
 console.log(req.body)

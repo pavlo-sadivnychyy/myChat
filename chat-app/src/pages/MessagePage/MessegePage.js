@@ -64,6 +64,7 @@ function MessagePage() {
 
   useEffect(async () => {
     socket.current.emit('joinRoom', { activeChatId: activeChat?._id, userId: user.id });
+    console.log(activeChat)
   }, [activeChat]);
 
   function setTeamActive(team) {

@@ -3,7 +3,6 @@ const User = require("../models/user");
 const router = Router();
 const multer = require('multer');
 const mongoose = require('mongoose');
-const ImportantConvList = require('../models/ImportantConv')
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb){
@@ -53,13 +52,8 @@ router.post('/', upload.single('file'), async function (req, res,next) {
                 file: req.file.path
             }
         );
-        const newImportantConv = await new ImportantConvList({
-          userId: newUser._id,
-          conversations: []
-        });
-        newImportantConv.save();
-        const savedUser = await newUser.save();
-        res.status(200).json(savedUser);
+        const result = await newUser.save();
+        res.status(200).json(result)
     }catch (err){
         if(err) throw err
     }

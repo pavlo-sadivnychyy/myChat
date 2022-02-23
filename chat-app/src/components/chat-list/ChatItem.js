@@ -34,7 +34,7 @@ function ChatItem({
   }, [item])
 
   useEffect(() => {
-    const res = activeUsers.find((item) => item.userId === friendData._id);
+    const res = activeUsers.find((item) => item.userId === friendData?._id);
     setToActive(res);
   }, [activeUsers, friendData]);
 

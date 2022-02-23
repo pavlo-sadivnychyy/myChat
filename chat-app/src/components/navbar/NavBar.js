@@ -7,7 +7,7 @@ import { useEffect, useGlobal } from 'reactn';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router-dom';
 import { Badge } from '@material-ui/core';
-import ime from '../../img/grapefruit-slice-332-332.jpg';
+import ime from '../../img/user.png';
 
 function NavBar() {
   const history = useHistory();

@@ -5,111 +5,120 @@ import {
 } from 'reactn';
 import axios from 'axios';
 import img from '../../img/user.png';
-import ime from '../../img/grapefruit-slice-332-332.jpg';
+
 
 function FriendInfo({ user, activeChat }) {
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    if (activeChat) {
-      const friendId = activeChat.members.find((id) => id !== user._id);
-      getFriendData(friendId);
-    } else {
-      setData(user);
+    const temp = []
+    if(activeChat){
+      if(activeChat?.user_info.length === 2){
+        const friend = activeChat?.user_info.find((item) => item._id !== user._id);
+        temp.push(friend)
+        setData(temp);
+      }else if(activeChat?.user_info.length > 2){
+        setData(activeChat?.user_info)
+      }
+    }else{
+      temp.push(user)
+      setData(temp)
     }
   }, [activeChat]);
 
-  async function getFriendData(id) {
-    try {
-      await axios.get(`/users/${id}`)
-        .then((res) => {
-          if (res.status === 200) {
-            setData(res.data);
-          } else {
-            getDispatch().openSnackbar({
-              open: true,
-              msg: "Couldn't get friend data",
-              color: 'warning',
-            });
-          }
-        });
-    } catch (err) {
-      if (err) console.log(err);
-    }
-  }
-
   return (
-    <div className="info-container">
-      <div className="profile-info">
-        <div className="img-container">
-          <div>
-            <img src={data.file ? data.file : ime} alt="Avatar" style={{ width: '76px', height: '76px' }} />
+    <>
+      {
+        data.length === 1 ?
+          <div className="info-container">
+            <div className="profile-info">
+              <div className="img-container">
+                <div>
+                  <img src={data[0]?.file ? data[0].file : img} alt="Avatar" style={{ width: '76px', height: '76px' }} />
+                </div>
+              </div>
+              <div className="friend-name-container">
+                <div>
+                  <p className="name">{`${data[0]?.name} ${data[0]?.surname}`}</p>
+                  <p className="place">New York, USA</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="full-info">
+              <div>
+                <p className="header">
+                  Nickname
+                </p>
+                <p className="value">
+                  {`${data[0]?.nickname}`}
+                </p>
+              </div>
+              <div>
+                <p className="header">
+                  Email
+                </p>
+                <p className="value">
+                  {`${data[0]?.email}`}
+                </p>
+              </div>
+              <div>
+                <p className="header">
+                  Phone number
+                </p>
+                <p className="value">
+                  {`${data[0]?.phone_number}`}
+                </p>
+              </div>
+              <hr />
+
+              <div>
+                <p className="header">
+                  Date of birth
+                </p>
+                <p className="value">
+                  {`${data[0]?.dob}`}
+                </p>
+              </div>
+              <div>
+                <p className="header">
+                  Gender
+                </p>
+                <p className="value">
+                  {`${data[0]?.gender}`}
+                </p>
+              </div>
+              <div>
+                <p className="header">
+                  Languages
+                </p>
+                <p className="value">
+                  {`${data[0]?.languages}`}
+                </p>
+              </div>
+              <button>Show full profile</button>
+              <hr />
+
+            </div>
           </div>
-        </div>
-        <div className="friend-name-container">
-          <div>
-            <p className="name">{`${data?.name} ${data?.surname}`}</p>
-            <p className="place">New York, USA</p>
+          :
+          <div className="info-container-group">
+              <div className="members-header">Group members</div>
+            {
+              data.map((item) => (
+                <div className='member-info'>
+                    <div className='image'><img src={item.file}/></div>
+                    <div className='info'>
+                      <p className="name">{`${item.name} ${item.surname}`}</p>
+                      <p className='nickname'>{`@${item.nickname}`}</p>
+                    </div>
+                </div>
+
+              ))
+            }
           </div>
-        </div>
-      </div>
-
-      <div className="full-info">
-        <div>
-          <p className="header">
-            Nickname
-          </p>
-          <p className="value">
-            {`${data?.nickname}`}
-          </p>
-        </div>
-        <div>
-          <p className="header">
-            Email
-          </p>
-          <p className="value">
-            {`${data?.email}`}
-          </p>
-        </div>
-        <div>
-          <p className="header">
-            Phone number
-          </p>
-          <p className="value">
-            {`${data?.phone_number}`}
-          </p>
-        </div>
-        <hr />
-
-        <div>
-          <p className="header">
-            Date of birth
-          </p>
-          <p className="value">
-            {`${data?.dob}`}
-          </p>
-        </div>
-        <div>
-          <p className="header">
-            Gender
-          </p>
-          <p className="value">
-            {`${data?.gender}`}
-          </p>
-        </div>
-        <div>
-          <p className="header">
-            Languages
-          </p>
-          <p className="value">
-            {`${data?.languages}`}
-          </p>
-        </div>
-        <button>Show full profile</button>
-        <hr />
-
-      </div>
-    </div>
+      }
+    </>
   );
 }
 

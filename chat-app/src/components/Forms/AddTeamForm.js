@@ -37,7 +37,7 @@ function AddTeamForm({ setFieldValue, values, handleChange }) {
     for (let i = 0; i < conversations.length; i++) {
       const friendId = conversations[i].members.find((item) => item !== user._id);
       await axios.get(`/users/${friendId}`)
-        .then((res) => setData((prev) => [...prev, { name: res.data.name, surname: res.data.surname, conversationId: conversations[i]._id }]));
+        .then((res) => setData((prev) => [...prev, { name: res.data?.name, surname: res.data?.surname, conversationId: conversations[i]._id }]));
     }
   }, [conversations]);
 

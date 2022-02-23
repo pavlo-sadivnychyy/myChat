@@ -99,7 +99,6 @@ function List({
                         axios.post('/conversations', { senderId: user._id, receiverId: item._id })
                           .then((res) => {
                             if (res.status === 200) {
-                              defineActiveChat(res.data);
                               setActiveMessages('All messages');
                               getAllUserConversations();
                               setSearchInput(true);
