@@ -7,6 +7,7 @@ import './RegistrationPage.scss';
 import { Button, FormHelperText } from '@material-ui/core';
 import { registrationSchema } from '../../validation';
 import CustomInput from '../../components/CustomInput';
+import {getDispatch} from "reactn";
 
 function RegistrationPage() {
   const history = useHistory();
@@ -43,11 +44,31 @@ function RegistrationPage() {
         },
       })
         .then((res) => {
-          if (res.status === 200) {
-            history.push('/login');
-          }
-        });
-    },
+                if(res.status === 200){
+                  history.push('/login');
+                  getDispatch().openSnackbar({
+                    open: true,
+                    msg: "Registration success",
+                    color: "success",
+                  });
+                }
+                if(res.status === 404) {
+                  getDispatch().openSnackbar({
+                    open: true,
+                    msg: "Something went wrong",
+                    color: "warning",
+                  });
+                }
+              }
+          )
+              .catch((err) => {
+                getDispatch().openSnackbar({
+                  open: true,
+                  msg: "Something went wrong",
+                  color: "warning",
+                });
+              });
+        },
     validationSchema: registrationSchema,
   });
 
