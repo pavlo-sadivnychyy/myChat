@@ -1,9 +1,12 @@
 import React from 'react';
 import './Channels.scss';
-import Teams from './Teams';
-import Groups from './Groups';
+import Teams from '../Teams/Teams';
+import Groups from '../Groups/Groups';
+import axios from "axios";
+import {getDispatch, useGlobal} from "reactn";
 
 function Channels({
+  user,
   setTeams,
   setGroups,
   teams,
@@ -14,11 +17,14 @@ function Channels({
   allUsers,
   getUsers,
   activeTeam,
-  activeChat
+  activeChat,
+  getGroups,
+  getTeams
 }) {
   return (
     <div className="chat-list-container">
       <Teams
+        getTeams={getTeams}
         activeTeam={activeTeam}
         setTeams={setTeams}
         setTeamActive={setTeamActive}
@@ -26,6 +32,8 @@ function Channels({
         teams={teams}
       />
       <Groups
+        user={user}
+        getGroups={getGroups}
         activeChat={activeChat}
         setGroups={setGroups}
         getUsers={getUsers}

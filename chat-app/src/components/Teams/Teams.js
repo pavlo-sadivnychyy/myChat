@@ -8,36 +8,16 @@ import AddTeamForm from '../Forms/AddTeamForm';
 
 function Teams({
   teams,
-  setTeams,
+  getTeams,
   getConversationsOfActiveTeam,
   setTeamActive,
   activeTeam
 }) {
-  const [user] = useGlobal('user');
 
   useEffect(() => {
     getTeams();
   }, []);
 
-
-  async function getTeams() {
-    try {
-      await axios.get(`/teams/${user._id}`)
-        .then((res) => {
-          if (res.status === 200) {
-            setTeams(res.data);
-          } else {
-            getDispatch().openSnackbar({
-              open: true,
-              msg: 'Teams not found',
-              color: 'warning',
-            });
-          }
-        });
-    } catch (err) {
-      if (err) console.log(err);
-    }
-  }
 
   return (
     <div className="teams">
@@ -55,19 +35,19 @@ function Teams({
       </div>
       <ul className="teams-list">
         {
-          teams?.map((opt, key) => (
+          teams?.map((opt) => (
             <li
               onClick={() => {
                 setTeamActive(opt);
                 getConversationsOfActiveTeam(opt);
               }}
-              key={key}
+              key={opt._id}
             >
               <p style={{color: activeTeam?._id === opt._id ? 'white' : ''}}>
                 #
                 {opt.name}
               </p>
-              <p style={{color: 'white'}}>{opt.conversations.length}</p>
+              <p style={{color: 'white'}}>{opt.conversations?.length}</p>
             </li>
           ))
         }

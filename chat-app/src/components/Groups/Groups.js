@@ -7,37 +7,18 @@ import Modal from '../Modal/Modal';
 import AddGroupForm from '../Forms/AddGroupForm';
 
 function Groups({
+  user,
+  getGroups,
   groups,
-  setGroups,
   defineActiveChat,
   allUsers,
   getUsers,
   activeChat
 }) {
-  const [user] = useGlobal('user');
 
   useEffect(() => {
     getGroups();
   }, []);
-
-  async function getGroups() {
-    try {
-      await axios.get(`/groups/${user._id}`)
-        .then((res) => {
-          if (res.status === 200) {
-            setGroups(res.data);
-          } else {
-            getDispatch().openSnackbar({
-              open: true,
-              msg: 'Groups not found',
-              color: 'warning',
-            });
-          }
-        });
-    } catch (err) {
-      if (err) console.log(err);
-    }
-  }
 
   return (
     <div className="groups">
@@ -57,14 +38,16 @@ function Groups({
         {
           groups?.map((opt) => (
             <li
-              key={opt._id}
+              key={opt?._id}
               onClick={() => {
-                defineActiveChat(opt);
+                if(activeChat?._id !== opt?._id){
+                  defineActiveChat(opt);
+                }
               }}
             >
-              <p style={{color: activeChat?._id === opt._id ? 'white' : ''}}>
+              <p style={{color: activeChat?._id === opt?._id ? 'white' : ''}}>
                 #
-                {opt.name}
+                {opt?.name}
               </p>
             </li>
           ))

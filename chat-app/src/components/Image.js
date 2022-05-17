@@ -15,7 +15,5 @@ function Image({blob,fileName}) {
   return (
     <img src={imageSrc ? imageSrc : img} alt={fileName} />
   )
-
-
 }
 export default Image

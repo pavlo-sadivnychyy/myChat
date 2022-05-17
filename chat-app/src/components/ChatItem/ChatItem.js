@@ -28,7 +28,7 @@ function ChatItem({
   const buttonRef = useRef(null);
 
   useEffect(() => {
-    const friendInfo = item.user_info.find((item) => item._id !== user._id);
+    const friendInfo = item.user_info.find((item) => item._id !== user?._id);
     setFriendData(friendInfo)
     setLastMessage(item.message[item.message.length - 1])
   }, [item])

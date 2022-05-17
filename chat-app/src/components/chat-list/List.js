@@ -3,7 +3,7 @@ import './List.scss';
 import { IoMdSearch } from '@react-icons/all-files/io/IoMdSearch';
 import { getDispatch, useGlobal } from 'reactn';
 import axios from 'axios';
-import ChatItem from './ChatItem';
+import ChatItem from '../ChatItem/ChatItem';
 import { CircularProgress } from '@material-ui/core';
 
 function List({
@@ -90,8 +90,8 @@ function List({
             <div className="users-list">
               <ul>
               {
-                filteredUsers.map((item) => {
-                  if(item._id === user._id) return null;
+                filteredUsers?.map((item) => {
+                  if(item._id === user?._id) return null;
                   return (
                     <li
                       key={item._id}
@@ -167,26 +167,27 @@ function List({
           </ul>
         </div>
       </div>
-      <div className="chats-list-container">
-        {
-          conversations?.map((item) => (
-            <div
-              key={item._id}
-            >
-              <ChatItem
-                getAllUserImportantConversations={getAllUserImportantConversations}
-                activeMessages={activeMessages}
-                defineActiveChat={defineActiveChat}
-                activeUsers={activeUsers}
-                setTeamActive={setTeamActive}
-                activeChat={activeChat}
-                getConversations={getAllUserConversations}
-                item={item}
-              />
-            </div>
-          ))
-        }
-      </div>
+      <ul className="chats-list-container">
+              {
+                  conversations?.map((item) => (
+                      <li
+                          key={item._id}
+                      >
+                          <ChatItem
+                              getAllUserImportantConversations={getAllUserImportantConversations}
+                              activeMessages={activeMessages}
+                              defineActiveChat={defineActiveChat}
+                              activeUsers={activeUsers}
+                              setTeamActive={setTeamActive}
+                              activeChat={activeChat}
+                              getConversations={getAllUserConversations}
+                              item={item}
+                          />
+                      </li>
+                  ))
+              }
+
+      </ul>
     </div>
 
   );

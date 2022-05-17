@@ -4,7 +4,7 @@ import { getDispatch, setGlobal, useGlobal } from 'reactn';
 import axios from 'axios';
 import io from 'socket.io-client';
 import { useStateIfMounted } from 'use-state-if-mounted';
-import Channels from '../../components/channels/Channels';
+import Channels from '../../components/Channels/Channels';
 import List from '../../components/chat-list/List';
 import FriendInfo from '../../components/profile-info/FriendInfo';
 import Chat from '../../components/main-chat/Chat';
@@ -23,7 +23,6 @@ function MessagePage() {
   const [newMessage, setNewMessage] = useState(null);
   const [notifications, setNotifications] = useState([])
   const [currentPage, setCurrentPage] = useState(1);
-  const chatRef = useRef(null);
 
 
 
@@ -95,6 +94,7 @@ function MessagePage() {
               }
             });
         }
+        console.log(temp)
         setConversations(temp);
       }
     } catch (err) {
@@ -131,6 +131,47 @@ function MessagePage() {
       if (err) console.log(err);
     }
   }
+  async function getTeams() {
+    try {
+      await axios.get(`/teams/${user._id}`)
+          .then((res) => {
+            if (res.status === 200) {
+              setTeams(res.data);
+            } else {
+              getDispatch().openSnackbar({
+                open: true,
+                msg: 'Teams not found',
+                color: 'warning',
+              });
+            }
+          });
+    } catch (err) {
+      getDispatch().openSnackbar({
+        open: true,
+        msg: 'Teams not found',
+        color: 'warning',
+      });
+    }
+  }
+
+  async function getGroups() {
+    try {
+      await axios.get(`/groups/${user._id}`)
+          .then((res) => {
+            if (res.status === 200) {
+              setGroups(res.data);
+            } else {
+              getDispatch().openSnackbar({
+                open: true,
+                msg: 'Groups not found',
+                color: 'warning',
+              });
+            }
+          });
+    } catch (err) {
+      if (err) console.log("Groups not found");
+    }
+  }
 
   async function getAllUserConversations() {
     try {
@@ -154,6 +195,9 @@ function MessagePage() {
   return (
     <div className="main-content">
       <Channels
+        getGroups={getGroups}
+        getTeams={getTeams}
+        user={user}
         activeChat={activeChat}
         activeTeam={activeTeam}
         setTeams={setTeams}
@@ -192,7 +236,6 @@ function MessagePage() {
             <Chat
               setMessages={setMessages}
               setCurrentPage={setCurrentPage}
-              chatRef={chatRef}
               socket={socket}
               updateMessages={updateMessages}
               currentUser={user}

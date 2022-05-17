@@ -3,13 +3,14 @@ import './Chat.scss';
 import { Formik } from 'formik';
 import { BsPaperclip } from 'react-icons/bs';
 import axios from 'axios';
-import Message from './Message';
+import Message from '../Message/Message';
 import { messageSchema } from '../../validation';
 
 function Chat({
-  messages, currentUser, activeChat, socket, chatRef, setCurrentPage, setMessages
+  messages, currentUser, activeChat, socket, setCurrentPage, setMessages
 }) {
   const messRef = useRef();
+  const chatRef = useRef(null);
 
   useEffect(() => {
     messRef.current?.scrollIntoView()
@@ -98,7 +99,7 @@ function Chat({
                   value={props.values.message}
                   onChange={props.handleChange}
                 />
-                <button className='submit' type="submit">SEND</button>
+                <button data-testid="formSubmitButton" className='submit' type="submit">SEND</button>
               </form>
             )}
           </Formik>

@@ -1,9 +1,8 @@
 import React from 'react';
 import './FriendInfo.scss';
 import {
-  getDispatch, useEffect, useGlobal, useState,
+   useEffect, useState,
 } from 'reactn';
-import axios from 'axios';
 import img from '../../img/user.png';
 
 
@@ -106,7 +105,7 @@ function FriendInfo({ user, activeChat }) {
               <div className="members-header">Group members</div>
             {
               data.map((item) => (
-                <div className='member-info'>
+                <div key={item._id} className='member-info'>
                     <div className='image'><img src={item.file}/></div>
                     <div className='info'>
                       <p className="name">{`${item.name} ${item.surname}`}</p>
