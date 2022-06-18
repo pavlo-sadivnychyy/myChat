@@ -3,7 +3,7 @@ import './NavBar.scss';
 import { IoHelp } from 'react-icons/io5';
 import { FaRegBell } from 'react-icons/fa';
 import { MdOutlineSupport, MdStarBorder } from 'react-icons/md';
-import { useEffect, useGlobal } from 'reactn';
+import { useGlobal } from 'reactn';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router-dom';
 import { Badge } from '@material-ui/core';
@@ -14,7 +14,6 @@ function NavBar() {
   const [user] = useGlobal('user');
   const [notif] = useGlobal('notif')
   const [cookies, , removeCookie] = useCookies(['jwt', 'connect.sid']);
-  const [not] = useGlobal('not');
   function exit() {
     if (cookies.jwt) {
       removeCookie('jwt');

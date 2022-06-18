@@ -27,11 +27,12 @@ function MessagePage() {
 
 
   useEffect(() => {
-    socket.current = io('ws://localhost:8000');
+    socket.current = io('ws://localhost:9000');
     socket.current.on('receiveMessage', (data) => {
       setNewMessage(data)
     });
     getAllUserConversations();
+    //eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -42,10 +43,12 @@ function MessagePage() {
         setNotifications([...notifications, newMessage?.conversationId])
       }
     }
+    //eslint-disable-next-line
   }, [newMessage]);
 
   useEffect(() => {
     updateMessages();
+    //eslint-disable-next-line
   }, [currentPage, activeChat])
 
   useEffect(() => {
@@ -59,11 +62,12 @@ function MessagePage() {
     setGlobal({
       notif: notifications
     })
+    //eslint-disable-next-line
   }, [notifications])
 
-  useEffect(async () => {
+  useEffect(() => {
     socket.current.emit('joinRoom', { activeChatId: activeChat?._id, userId: user.id });
-    console.log(activeChat)
+    //eslint-disable-next-line
   }, [activeChat]);
 
   function setTeamActive(team) {

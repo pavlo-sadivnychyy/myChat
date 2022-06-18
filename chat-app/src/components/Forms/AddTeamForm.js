@@ -25,20 +25,22 @@ function AddTeamForm({ setFieldValue, values, handleChange }) {
 
   const [data, setData] = useState([]);
 
-  useEffect(async () => {
-    await axios.get(`/conversations/${user._id}`)
+  useEffect( () => {
+     axios.get(`/conversations/${user._id}`)
       .then((res) => {
         setConversations(res.data);
       });
     values.currentUser = user._id;
+    //eslint-disable-next-line
   }, [user]);
 
-  useEffect(async () => {
+  useEffect( () => {
     for (let i = 0; i < conversations.length; i++) {
       const friendId = conversations[i].members.find((item) => item !== user._id);
-      await axios.get(`/users/${friendId}`)
+       axios.get(`/users/${friendId}`)
         .then((res) => setData((prev) => [...prev, { name: res.data?.name, surname: res.data?.surname, conversationId: conversations[i]._id }]));
     }
+    //eslint-disable-next-line
   }, [conversations]);
 
   return (

@@ -4,7 +4,6 @@ import { IoMdSearch } from '@react-icons/all-files/io/IoMdSearch';
 import { getDispatch, useGlobal } from 'reactn';
 import axios from 'axios';
 import ChatItem from '../ChatItem/ChatItem';
-import { CircularProgress } from '@material-ui/core';
 
 function List({
   conversations,
@@ -32,6 +31,7 @@ function List({
 
   useEffect(() => {
     getUsers();
+      //eslint-disable-next-line
   }, [searchInput]);
 
   useEffect(() => {

@@ -23,6 +23,7 @@ function FriendInfo({ user, activeChat }) {
       temp.push(user)
       setData(temp)
     }
+    //eslint-disable-next-line
   }, [activeChat]);
 
   return (
@@ -106,7 +107,7 @@ function FriendInfo({ user, activeChat }) {
             {
               data.map((item) => (
                 <div key={item._id} className='member-info'>
-                    <div className='image'><img src={item.file}/></div>
+                    <div className='image'><img alt="file" src={item.file}/></div>
                     <div className='info'>
                       <p className="name">{`${item.name} ${item.surname}`}</p>
                       <p className='nickname'>{`@${item.nickname}`}</p>

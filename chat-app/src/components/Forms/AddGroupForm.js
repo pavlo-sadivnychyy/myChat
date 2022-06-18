@@ -1,5 +1,5 @@
 import React, {
-  getDispatch, useState, useEffect, useGlobal,
+  getDispatch, useEffect, useGlobal,
 } from 'reactn';
 import { Form, withFormik } from 'formik';
 import {
@@ -25,6 +25,7 @@ function AddGroupForm({
 
   useEffect(() => {
     getUsers();
+    //eslint-disable-next-line
   }, []);
 
   return (

@@ -1,10 +1,8 @@
 import img from '../../img/user.png';
 import './Message.scss';
 import moment from 'moment';
-import { useGlobal } from 'reactn';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useStateIfMounted } from 'use-state-if-mounted';
 import Image from '../Image';
 import FileDownload from 'js-file-download'
 import fileImage from '../../img/file.png'
@@ -27,7 +25,7 @@ function Message({ item, own }) {
   }
 
   useEffect(() => {
-    item.user_info?.map((user) => {
+    item.user_info?.forEach((user) => {
       if(user._id === item.sender){
         setFriend(user)
       }
@@ -76,7 +74,7 @@ function Message({ item, own }) {
                       <p onClick={(e) => download(e)} className='download-file-right'>Download</p>
                     </div>
                   </div>
-                  <div className='file'>{typeof item.file === 'string' ? <img src={item.file || fileImage} alt='Image'/> :
+                  <div className='file'>{typeof item.file === 'string' ? <img src={item.file || fileImage} alt='file'/> :
                   <Image blob={blob} fileName={item.filename}/>}</div>
                   <div className="chat-avatar">
                     <img src={friend.file ? friend.file : img} alt="Retail Admin" />
@@ -92,7 +90,7 @@ function Message({ item, own }) {
                     <img src={friend.file ? friend.file : img} alt="Retail Admin" />
                   </div>
                   <div className='file'>
-                    {typeof item.file === 'string' ? <img src={item.file || fileImage} alt='Image'/> :
+                    {typeof item.file === 'string' ? <img src={item.file || fileImage} alt='file'/> :
                       <Image blob={blob} fileName={item.filename}/>}
                   </div>
                   <div className='options'>

@@ -1,8 +1,6 @@
 import { IoMdAdd } from '@react-icons/all-files/io/IoMdAdd';
 import React, { useEffect } from 'react';
 import './Groups.scss';
-import { getDispatch, useGlobal } from 'reactn';
-import axios from 'axios';
 import Modal from '../Modal/Modal';
 import AddGroupForm from '../Forms/AddGroupForm';
 
@@ -18,6 +16,7 @@ function Groups({
 
   useEffect(() => {
     getGroups();
+    //eslint-disable-next-line
   }, []);
 
   return (

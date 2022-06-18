@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import './Teams.scss';
 import { MdPersonAdd } from '@react-icons/all-files/md/MdPersonAdd';
-import axios from 'axios';
-import { getDispatch, useGlobal } from 'reactn';
 import Modal from '../Modal/Modal';
 import AddTeamForm from '../Forms/AddTeamForm';
 
@@ -16,6 +14,7 @@ function Teams({
 
   useEffect(() => {
     getTeams();
+    //eslint-disable-next-line
   }, []);
 
 

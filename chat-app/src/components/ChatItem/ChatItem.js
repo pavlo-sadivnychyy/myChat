@@ -31,6 +31,7 @@ function ChatItem({
     const friendInfo = item.user_info.find((item) => item._id !== user?._id);
     setFriendData(friendInfo)
     setLastMessage(item.message[item.message.length - 1])
+    //eslint-disable-next-line
   }, [item])
 
   useEffect(() => {
